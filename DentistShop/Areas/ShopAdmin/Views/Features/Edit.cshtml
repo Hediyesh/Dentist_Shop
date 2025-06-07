@@ -1,0 +1,34 @@
+﻿@model DataLayer.Features
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = null;
+}
+
+@using (Ajax.BeginForm("Edit", "Features", FormMethod.Post, new AjaxOptions()
+{
+    OnSuccess = "hideFeatureModal",
+    UpdateTargetId = "listFeatures"
+}))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.featureId)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.featureTitle, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.featureTitle, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.featureTitle, "", new { @class = "text-danger", @id = "featureTitleEditError" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="ثبت ویرایش" class="btn btn-success btn-sm" />
+            </div>
+        </div>
+    </div>
+}

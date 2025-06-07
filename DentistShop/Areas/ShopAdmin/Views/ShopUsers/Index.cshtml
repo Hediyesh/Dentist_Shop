@@ -1,0 +1,106 @@
+﻿@model IEnumerable<DataLayer.ShopUser>
+
+@{
+    ViewBag.Title = "مدیریت کاربران";
+    Layout = "~/Areas/ShopAdmin/Views/Shared/_AdminLayout.cshtml";
+}
+@Html.AntiForgeryToken()
+<h3>مدیریت کاربران</h3>
+<hr />
+<a class="btn btn-sm btn-primary" href="@Url.Action("create")">افزودن کاربر جدید</a>
+<br />
+<br />
+<div class="row table-responsive" style="width:100%;overflow-x:auto">
+    <table class="table table-bordered">
+        <tr style="background-color:lightgray">
+            <th>
+                @Html.DisplayNameFor(model => model.userName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Roles.RoleName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.firstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.lastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.emailAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RegisterDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.phone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr id="@item.userId">
+                <td>
+                    @Html.DisplayFor(modelItem => item.userName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Roles.RoleName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.firstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.lastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.emailAddress)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsActive)
+                </td>
+                <td>
+                    @item.RegisterDate.ToShamsi()
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.phone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    <a class="btn btn-warning btn-sm" href="@Url.Action("Edit",new { id=item.userId})" title="ویرایش">
+                        <i class="glyphicon glyphicon-edit"></i>
+                    </a>
+                    <button class="btn btn-danger btn-sm" onclick="HazfeKarbar(@item.userId)" title="حذف">
+                        <i class="glyphicon glyphicon-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        function HazfeKarbar(id) {
+            if (confirm("آیا از حذف اطمینان دارید؟")) {
+                var token = document.getElementsByName("__RequestVerificationToken")[0].value;
+                $.ajax({
+                    type: 'post',
+                    dataType: 'json',
+                    data: { "id": id, "__RequestVerificationToken": token },
+                    url: '/ShopAdmin/shopusers/DeleteConfirmed',
+                    success: function (data) {
+                        $("#" + id).remove();
+                    }
+                })
+            }
+        }
+    </script>
+}

@@ -1,0 +1,12 @@
+﻿@model IEnumerable<DataLayer.Product>
+<p>جدید ترین ها</p>
+<div class="row">
+    @foreach (var item in Model)
+    {
+
+        @Html.Partial("_Product", item)
+    }
+</div>
+
+
+

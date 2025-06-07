@@ -1,0 +1,35 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+<br />
+<div class="row">
+    <div class="row ">
+        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                <li data-target="#myCarousel" data-slide-to="1"></li>
+                <li data-target="#myCarousel" data-slide-to="2"></li>
+            </ol>
+            <div class="carousel-inner">
+                <div class="item active">
+                    <img class="imgcar" src="/Pictures/The-Advantages-of-Opening-Your-Own-Dental-Practice.jpg" />
+                </div>
+
+                <div class="item">
+                    <img class="imgcar" src="/Pictures/instruments.jpg" alt="England" />
+                </div>
+                <div class="item">
+                    <img class="imgcar" src="/Pictures/How_To_Get_Financing_For_Dental_Equipment.jpg" alt="New york" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <hr />
+</div>
+<br />
+<br />
+<hr />
+@Html.Action("NewestProducts", "Product", new { area = "" })
+<hr />
+@Html.Action("ProductsCheapest", "Product", new { area = "" })

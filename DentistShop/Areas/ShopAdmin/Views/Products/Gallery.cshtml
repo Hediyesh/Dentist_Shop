@@ -1,0 +1,80 @@
+﻿@model DataLayer.ProductGalleries
+
+@{
+    ViewBag.Title = "Gallery";
+    Layout = "~/Areas/ShopAdmin/Views/Shared/_AdminLayout.cshtml";
+}
+<h4>گالری کالا</h4>
+<div class="row">
+    @using (Html.BeginForm("Gallery", "Products", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.productId)
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <div class="form-horizontal">
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.imageName, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <input type="file" name="imgUp" id="imgUp" />
+                        @Html.ValidationMessageFor(model => model.imageName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <hr />
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="ثبت تصویر" class="btn btn-sm btn-success" />
+                        <a class="btn btn-sm btn-primary" href="/ShopAdmin/products/index">بازگشت به لیست کالا</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            @{
+                List<DataLayer.ProductGalleries> galleries = ViewBag.Galleries;
+                <div class="table-responsive">
+                    <table class=" table table-bordered">
+                        <tr style="background-color:lightgray">
+                            <th>تصویر</th>
+                            <th></th>
+                        </tr>
+                        <tbody>
+                            @foreach (var g in galleries)
+                            {
+                                <tr id="@g.galleryId">
+                                    <td>
+                                        <img style="width:100px;height:100px" class="thumbnail" src="/Pictures/ProductImages/@g.imageName" />
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-danger btn-sm" onclick="DeleteGallery(@g.galleryId)">
+                                            <i class=" glyphicon glyphicon-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    }
+</div>
+@section scripts{
+    <script type="text/javascript">
+        function DeleteGallery(id) {
+            if (confirm("آیا از حذف اطمینان دارید؟")) {
+                var token = document.getElementsByName("__RequestVerificationToken")[0].value;
+                $.ajax({
+                    type: 'post',
+                    dataType: 'json',
+                    data: { "id": id, "__RequestVerificationToken": token },
+                    url: '/ShopAdmin/products/deletegallery',
+                    success: function (data) {
+                        $("#" + id).remove();
+                    }
+                })
+            }
+        }
+    </script>
+}

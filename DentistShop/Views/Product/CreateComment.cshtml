@@ -1,0 +1,26 @@
+﻿@model DataLayer.ProductComments
+<head>
+    <style>
+        textarea {
+            max-width: 100%;
+            min-width: 100%;
+        }
+    </style>
+</head>
+<input class="hidden" value="@Model.productId" id="productId" />
+<input class="hidden" value="@Model.parentId" id="parentId" />
+<input class="hidden" value="@Model.userId" id="userId" />
+<input class="hidden" value="@Model.commentId" id="commentId" />
+<div class="row">
+    <p id="replywarning"></p>
+</div>
+<div class="row" id="addComment" style="border-radius: 5px;border:1px solid lightgray">
+    <textarea id="commentText" placeholder="نظر خود را وارد کنید" class="col-lg-12 col-md-12 col-sm-12 col-xs-12  form-control " style="max-width:100%"></textarea>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
+        <p id="ValidationMessagecommentText" style="color:red"></p>
+    </div>
+    <input value="ثبت" type="button" onclick="AddComment()" class="col-lg-6 col-md-6 col-sm-6 col-xs-6 btn btn-sm btn-success" style="max-width:100%" />
+    <button class="col-lg-6 col-md-6 col-sm-6 col-xs-6 btn btn-sm btn-danger" style="max-width:100%" onclick="Enseraf()">انصراف</button>
+</div>
+
+

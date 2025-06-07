@@ -1,0 +1,189 @@
+﻿@model DataLayer.ShopUser
+@{
+    ViewBag.Title = "PanelPage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h4>پنل کاربری</h4>
+<hr />
+@if (Model.userName != User.Identity.Name)
+{
+    <div class="row alert alert-warning">
+        <b>توجه!</b>
+        <p>کاربر گرامی شما مجوز دسترسی به این بخش را ندارید.</p>
+    </div>
+}
+
+else
+{
+    <div class="row">
+        <div class="col-lg-2 col-md-3 col-sm-6 col-xs-12">
+            <img src="/Pictures/default-avatar-profile-icon-set-collection-anonymous-social-media-default-avatar-profile-icon-set-collection-anonymous-social-176237699 (2).jpg" class="img-circle " style="height:50px;width:50px;margin-right:40px" />
+        </div>
+        <div class="col-lg-10 col-md-9 col-sm-6 col-xs-12">
+            <p>نام کاربری : @Model.userName</p>
+            <p>ایمیل : @Model.emailAddress</p>
+        </div>
+    </div>
+    <br />
+    <a class="btn btn-sm btn-info" href="/UserPanel/Panel/EditProfile/@FormsAuthentication.HashPasswordForStoringInConfigFile(Model.userName, "MD5")">ویرایش اطلاعات کاربری</a>
+    <a class="btn btn-sm btn-warning" href="/UserPanel/Panel/ChangePassword">تغییر رمز عبور</a>
+    <a href="/ShoppingCart/@Model.userName" class="btn btn-sm btn-success">سبد خرید</a>
+    if (Model.RoleId == 2)
+    {
+        <a href="~/ShopAdmin/shopusers/index" class="btn btn-sm btn-primary">ورود به پنل ادمین</a>
+    }
+    <br />
+    <br />
+    <ul class="row nav nav-tabs" id="tabs">
+        <li class="active"><a data-toggle="tab" href="#com">نظرات</a></li>
+        <li><a data-toggle="tab" href="#like">کالا های پسندیده شده</a></li>
+        <li><a data-toggle="tab" href="#rate">امتیازات داده شده</a></li>
+        <li><a data-toggle="tab" href="#shop">خرید های انجام شده</a></li>
+    </ul>
+
+    <div class="row tab-content">
+        <div id="com" class="tab-pane fade in active">
+            <br />
+            @if (Model.ProductComments.Any())
+            {
+                foreach (var item in Model.ProductComments)
+                {
+                    <button class="btn btn-sm btn-info" onclick="ShowProduct(@item.productId)">مشاهده ی کالا</button>
+                    <div class="row" id="@item.commentId" style="border:1px solid lightgray;border-radius:5px;background-color:ghostwhite">
+                        <br />
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                            <img style="height:40px;width:40px" class="img-circle" src="/Pictures/default-avatar-profile-icon-set-collection-anonymous-social-media-default-avatar-profile-icon-set-collection-anonymous-social-176237699 (2).jpg" />
+                        </div>
+                        <div class="col-lg-2 col-md-5 col-sm-5 col-xs-7">
+                            <p>کاربر :@item.ShopUser.userName</p>
+                            <p>تاریخ : @item.createDate.ToShamsi()</p>
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <br />
+                            <p id="comTxt@(item.commentId)">متن : @item.commentText</p>
+                            <br />
+                        </div>
+                        <br />
+                    </div>
+                    <hr />
+                }
+            }
+                else
+                {
+                    <div class="alert alert-warning">
+                        <p>لیست خالی می باشد!</p>
+                    </div>
+                }
+        </div>
+        <div id="like" class="tab-pane fade">
+            <br />
+            @if (Model.Likes.Any())
+            {
+                <div class="row table-responsive">
+                    <table class="table table-bordered">
+                        <tr style="background-color:gray;color:white">
+                            <th style="width:80%">مشخصات کالا</th>
+                            <th style="width:20%"></th>
+                        </tr>
+                        @foreach (var item in Model.Likes)
+                        {
+                            <tr style="background-color:ghostwhite">
+                                <td>
+                                    <div>
+                                        نام کالا: @item.Product.productName   |
+                                        قیمت کالا : @item.Product.productPriceWithDiscont تومان  |
+                                        تعداد لایک : @item.Product.likesCount
+                                    </div>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-info btn-block" onclick="ShowProduct(@item.productId)">مشاهده ی کالا</button>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+
+            }
+            else
+            {
+                <div class="alert alert-warning">
+                    <p>لیست خالی می باشد!</p>
+                </div>
+            }
+        </div>
+        <div id="rate" class="tab-pane fade">
+            <br />
+            @if (Model.Rates.Any())
+            {
+                <div class="row table-responsive">
+                    <table class="table table-bordered">
+                        <tr style="background-color:gray;color:white">
+                            <th style="width:80%">مشخصات کالا</th>
+                            <th style="width:20%"></th>
+                        </tr>
+                        @foreach (var item in Model.Rates)
+                        {
+                            <tr style="background-color:ghostwhite">
+                                <td>
+                                    <div>
+                                        نام کالا: @item.Product.productName   |
+                                        قیمت کالا : @item.Product.productPriceWithDiscont تومان  |
+                                        امتیاز کل : @item.Product.rate
+                                    </div>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-info btn-block" onclick="ShowProduct(@item.productId)">مشاهده ی کالا</button>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+
+            }
+            else
+            {
+                <div class="alert alert-warning">
+                    <p>لیست خالی می باشد!</p>
+                </div>
+            }
+        </div>
+        <div id="shop" class="tab-pane fade">
+            <br />
+            @if (Model.Orders.Any(a => a.RefID != 0))
+            {
+                <div class="row table-responsive">
+                    <table class="table table-bordered">
+                        <tr style="background-color:gray;color:white">
+                            <th style="width:80%">مشخصات خرید</th>
+                            <th style="width:20%"></th>
+                        </tr>
+                        @foreach (var item in Model.Orders.Where(w => w.isfinal != false).ToList())
+                        {
+                            <tr style="background-color:ghostwhite">
+                                <td>
+                                    <div>
+                                        کد رهگیری: @item.RefID   |
+                                        قیمت کل پرداختی : @item.wholeprice تومان  |
+                                        تاریخ ثبت : @item.sabtDate.ToShamsi()
+                                    </div>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-info btn-block" onclick="ShowDetails(@item.orderid)">مشاهده ی جزئیات خرید</button>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+
+            }
+            else
+            {
+                <div class="alert alert-warning">
+                    <p>لیست خالی می باشد!</p>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+

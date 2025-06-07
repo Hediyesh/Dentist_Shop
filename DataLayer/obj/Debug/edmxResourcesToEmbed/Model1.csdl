@@ -1,0 +1,522 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DentistShopDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Roles">
+    <Key>
+      <PropertyRef Name="RoleId" />
+    </Key>
+    <Property Name="RoleId" Type="Int32" Nullable="false" />
+    <Property Name="RoleName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="RoleTitle" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="ShopUser" Relationship="DentistShopDBModel.FK_UserRole" FromRole="Roles" ToRole="ShopUser" />
+  </EntityType>
+  <EntityContainer Name="DentistShopDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Roles" EntityType="Self.Roles" />
+    <EntitySet Name="Features" EntityType="DentistShopDBModel.Features" />
+    <EntitySet Name="Product" EntityType="DentistShopDBModel.Product" />
+    <EntitySet Name="ProductFeatures" EntityType="DentistShopDBModel.ProductFeatures" />
+    <EntitySet Name="ShopUser" EntityType="DentistShopDBModel.ShopUser" />
+    <AssociationSet Name="FK_ProductFeaturesAndFeatures" Association="DentistShopDBModel.FK_ProductFeaturesAndFeatures">
+      <End Role="Features" EntitySet="Features" />
+      <End Role="ProductFeatures" EntitySet="ProductFeatures" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductFeaturesAndProduct" Association="DentistShopDBModel.FK_ProductFeaturesAndProduct">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="ProductFeatures" EntitySet="ProductFeatures" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserRole" Association="DentistShopDBModel.FK_UserRole">
+      <End Role="Roles" EntitySet="Roles" />
+      <End Role="ShopUser" EntitySet="ShopUser" />
+    </AssociationSet>
+    <EntitySet Name="Likes" EntityType="DentistShopDBModel.Likes" />
+    <EntitySet Name="ProductComments" EntityType="DentistShopDBModel.ProductComments" />
+    <EntitySet Name="ProductGalleries" EntityType="DentistShopDBModel.ProductGalleries" />
+    <EntitySet Name="ProductGroup" EntityType="DentistShopDBModel.ProductGroup" />
+    <EntitySet Name="ProductSelectedGroups" EntityType="DentistShopDBModel.ProductSelectedGroups" />
+    <EntitySet Name="Rates" EntityType="DentistShopDBModel.Rates" />
+    <AssociationSet Name="FK_ProductLike" Association="DentistShopDBModel.FK_ProductLike">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="Likes" EntitySet="Likes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserLike" Association="DentistShopDBModel.FK_UserLike">
+      <End Role="ShopUser" EntitySet="ShopUser" />
+      <End Role="Likes" EntitySet="Likes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CommentForProduct" Association="DentistShopDBModel.FK_CommentForProduct">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="ProductComments" EntitySet="ProductComments" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Product" Association="DentistShopDBModel.FK_Product">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="ProductSelectedGroups" EntitySet="ProductSelectedGroups" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductAndGallery" Association="DentistShopDBModel.FK_ProductAndGallery">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="ProductGalleries" EntitySet="ProductGalleries" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductRates" Association="DentistShopDBModel.FK_ProductRates">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="Rates" EntitySet="Rates" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CommentByUser" Association="DentistShopDBModel.FK_CommentByUser">
+      <End Role="ShopUser" EntitySet="ShopUser" />
+      <End Role="ProductComments" EntitySet="ProductComments" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CommentParent" Association="DentistShopDBModel.FK_CommentParent">
+      <End Role="ProductComments" EntitySet="ProductComments" />
+      <End Role="ProductComments1" EntitySet="ProductComments" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Group" Association="DentistShopDBModel.FK_Group">
+      <End Role="ProductGroup" EntitySet="ProductGroup" />
+      <End Role="ProductSelectedGroups" EntitySet="ProductSelectedGroups" />
+    </AssociationSet>
+    <AssociationSet Name="FK_IdParent" Association="DentistShopDBModel.FK_IdParent">
+      <End Role="ProductGroup" EntitySet="ProductGroup" />
+      <End Role="ProductGroup1" EntitySet="ProductGroup" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserRates" Association="DentistShopDBModel.FK_UserRates">
+      <End Role="ShopUser" EntitySet="ShopUser" />
+      <End Role="Rates" EntitySet="Rates" />
+    </AssociationSet>
+    <EntitySet Name="ShoppingCart" EntityType="DentistShopDBModel.ShoppingCart" />
+    <AssociationSet Name="FK_ProductShoppingCart" Association="DentistShopDBModel.FK_ProductShoppingCart">
+      <End Role="Product" EntitySet="Product" />
+      <End Role="ShoppingCart" EntitySet="ShoppingCart" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserShoppingCart" Association="DentistShopDBModel.FK_UserShoppingCart">
+      <End Role="ShopUser" EntitySet="ShopUser" />
+      <End Role="ShoppingCart" EntitySet="ShoppingCart" />
+    </AssociationSet>
+    <EntitySet Name="OrderListShopCarts" EntityType="DentistShopDBModel.OrderListShopCarts" />
+    <AssociationSet Name="FK_OrderShoppingCart" Association="DentistShopDBModel.FK_OrderShoppingCart">
+      <End Role="ShoppingCart" EntitySet="ShoppingCart" />
+      <End Role="OrderListShopCarts" EntitySet="OrderListShopCarts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserOrderListShopCarts" Association="DentistShopDBModel.FK_UserOrderListShopCarts">
+      <End Role="ShopUser" EntitySet="ShopUser" />
+      <End Role="OrderListShopCarts" EntitySet="OrderListShopCarts" />
+    </AssociationSet>
+    <EntitySet Name="Orders" EntityType="DentistShopDBModel.Orders" />
+    <AssociationSet Name="FK_OrderShoppingCartOrder" Association="DentistShopDBModel.FK_OrderShoppingCartOrder">
+      <End Role="Orders" EntitySet="Orders" />
+      <End Role="OrderListShopCarts" EntitySet="OrderListShopCarts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserOrder" Association="DentistShopDBModel.FK_UserOrder">
+      <End Role="ShopUser" EntitySet="ShopUser" />
+      <End Role="Orders" EntitySet="Orders" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Features">
+    <Key>
+      <PropertyRef Name="featureId" />
+    </Key>
+    <Property Name="featureId" Type="Int32" Nullable="false" />
+    <Property Name="featureTitle" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="ProductFeatures" Relationship="DentistShopDBModel.FK_ProductFeaturesAndFeatures" FromRole="Features" ToRole="ProductFeatures" />
+  </EntityType>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="productId" />
+    </Key>
+    <Property Name="productId" Type="Int32" Nullable="false" />
+    <Property Name="likesCount" Type="Int32" />
+    <Property Name="rate" Type="Double" />
+    <Property Name="productName" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="productcount" Type="Int32" />
+    <Property Name="discount" Type="Int32" />
+    <Property Name="imageName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="createDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Price" Type="Int32" Nullable="false" />
+    <Property Name="viewCount" Type="Int32" />
+    <Property Name="productPriceWithDiscont" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="ProductFeatures" Relationship="DentistShopDBModel.FK_ProductFeaturesAndProduct" FromRole="Product" ToRole="ProductFeatures" />
+    <NavigationProperty Name="Likes" Relationship="DentistShopDBModel.FK_ProductLike" FromRole="Product" ToRole="Likes" />
+    <NavigationProperty Name="ProductComments" Relationship="DentistShopDBModel.FK_CommentForProduct" FromRole="Product" ToRole="ProductComments" />
+    <NavigationProperty Name="ProductSelectedGroups" Relationship="DentistShopDBModel.FK_Product" FromRole="Product" ToRole="ProductSelectedGroups" />
+    <NavigationProperty Name="ProductGalleries" Relationship="DentistShopDBModel.FK_ProductAndGallery" FromRole="Product" ToRole="ProductGalleries" />
+    <NavigationProperty Name="Rates" Relationship="DentistShopDBModel.FK_ProductRates" FromRole="Product" ToRole="Rates" />
+    <NavigationProperty Name="ShoppingCart" Relationship="DentistShopDBModel.FK_ProductShoppingCart" FromRole="Product" ToRole="ShoppingCart" />
+  </EntityType>
+  <EntityType Name="ProductFeatures">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="featureId" Type="Int32" Nullable="false" />
+    <Property Name="productId" Type="Int32" Nullable="false" />
+    <Property Name="value" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Features" Relationship="DentistShopDBModel.FK_ProductFeaturesAndFeatures" FromRole="ProductFeatures" ToRole="Features" />
+    <NavigationProperty Name="Product" Relationship="DentistShopDBModel.FK_ProductFeaturesAndProduct" FromRole="ProductFeatures" ToRole="Product" />
+  </EntityType>
+  <EntityType Name="ShopUser">
+    <Key>
+      <PropertyRef Name="userId" />
+    </Key>
+    <Property Name="userId" Type="Int32" Nullable="false" />
+    <Property Name="userName" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="firstName" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="lastName" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="emailAddress" Type="String" Nullable="false" MaxLength="350" FixedLength="false" Unicode="true" />
+    <Property Name="password" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="pic" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+    <Property Name="RoleId" Type="Int32" Nullable="false" />
+    <Property Name="ActiveCode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="IsActive" Type="Boolean" Nullable="false" />
+    <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="phone" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Address" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Roles" Relationship="DentistShopDBModel.FK_UserRole" FromRole="ShopUser" ToRole="Roles" />
+    <NavigationProperty Name="Likes" Relationship="DentistShopDBModel.FK_UserLike" FromRole="ShopUser" ToRole="Likes" />
+    <NavigationProperty Name="ProductComments" Relationship="DentistShopDBModel.FK_CommentByUser" FromRole="ShopUser" ToRole="ProductComments" />
+    <NavigationProperty Name="Rates" Relationship="DentistShopDBModel.FK_UserRates" FromRole="ShopUser" ToRole="Rates" />
+    <NavigationProperty Name="ShoppingCart" Relationship="DentistShopDBModel.FK_UserShoppingCart" FromRole="ShopUser" ToRole="ShoppingCart" />
+    <NavigationProperty Name="OrderListShopCarts" Relationship="DentistShopDBModel.FK_UserOrderListShopCarts" FromRole="ShopUser" ToRole="OrderListShopCarts" />
+    <NavigationProperty Name="Orders" Relationship="DentistShopDBModel.FK_UserOrder" FromRole="ShopUser" ToRole="Orders" />
+  </EntityType>
+  <Association Name="FK_ProductFeaturesAndFeatures">
+    <End Type="DentistShopDBModel.Features" Role="Features" Multiplicity="1" />
+    <End Type="DentistShopDBModel.ProductFeatures" Role="ProductFeatures" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Features">
+        <PropertyRef Name="featureId" />
+      </Principal>
+      <Dependent Role="ProductFeatures">
+        <PropertyRef Name="featureId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductFeaturesAndProduct">
+    <End Type="DentistShopDBModel.Product" Role="Product" Multiplicity="1" />
+    <End Type="DentistShopDBModel.ProductFeatures" Role="ProductFeatures" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="productId" />
+      </Principal>
+      <Dependent Role="ProductFeatures">
+        <PropertyRef Name="productId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserRole">
+    <End Type="DentistShopDBModel.Roles" Role="Roles" Multiplicity="1" />
+    <End Type="DentistShopDBModel.ShopUser" Role="ShopUser" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Roles">
+        <PropertyRef Name="RoleId" />
+      </Principal>
+      <Dependent Role="ShopUser">
+        <PropertyRef Name="RoleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Likes">
+    <Key>
+      <PropertyRef Name="likeId" />
+    </Key>
+    <Property Name="likeId" Type="Int32" Nullable="false" />
+    <Property Name="userId" Type="Int32" Nullable="false" />
+    <Property Name="productId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Product" Relationship="DentistShopDBModel.FK_ProductLike" FromRole="Likes" ToRole="Product" />
+    <NavigationProperty Name="ShopUser" Relationship="DentistShopDBModel.FK_UserLike" FromRole="Likes" ToRole="ShopUser" />
+  </EntityType>
+  <EntityType Name="ProductComments">
+    <Key>
+      <PropertyRef Name="commentId" />
+    </Key>
+    <Property Name="commentId" Type="Int32" Nullable="false" />
+    <Property Name="productId" Type="Int32" Nullable="false" />
+    <Property Name="userId" Type="Int32" Nullable="false" />
+    <Property Name="createDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="commentText" Type="String" Nullable="false" MaxLength="800" FixedLength="false" Unicode="true" />
+    <Property Name="parentId" Type="Int32" />
+    <NavigationProperty Name="Product" Relationship="DentistShopDBModel.FK_CommentForProduct" FromRole="ProductComments" ToRole="Product" />
+    <NavigationProperty Name="ShopUser" Relationship="DentistShopDBModel.FK_CommentByUser" FromRole="ProductComments" ToRole="ShopUser" />
+    <NavigationProperty Name="ProductComments1" Relationship="DentistShopDBModel.FK_CommentParent" FromRole="ProductComments" ToRole="ProductComments1" />
+    <NavigationProperty Name="ProductComments2" Relationship="DentistShopDBModel.FK_CommentParent" FromRole="ProductComments1" ToRole="ProductComments" />
+  </EntityType>
+  <EntityType Name="ProductGalleries">
+    <Key>
+      <PropertyRef Name="galleryId" />
+    </Key>
+    <Property Name="galleryId" Type="Int32" Nullable="false" />
+    <Property Name="productId" Type="Int32" Nullable="false" />
+    <Property Name="imageName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Product" Relationship="DentistShopDBModel.FK_ProductAndGallery" FromRole="ProductGalleries" ToRole="Product" />
+  </EntityType>
+  <EntityType Name="ProductGroup">
+    <Key>
+      <PropertyRef Name="groupId" />
+    </Key>
+    <Property Name="groupId" Type="Int32" Nullable="false" />
+    <Property Name="groupName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="parentId" Type="Int32" />
+    <NavigationProperty Name="ProductSelectedGroups" Relationship="DentistShopDBModel.FK_Group" FromRole="ProductGroup" ToRole="ProductSelectedGroups" />
+    <NavigationProperty Name="ProductGroup1" Relationship="DentistShopDBModel.FK_IdParent" FromRole="ProductGroup" ToRole="ProductGroup1" />
+    <NavigationProperty Name="ProductGroup2" Relationship="DentistShopDBModel.FK_IdParent" FromRole="ProductGroup1" ToRole="ProductGroup" />
+  </EntityType>
+  <EntityType Name="ProductSelectedGroups">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" />
+    <Property Name="groupId" Type="Int32" Nullable="false" />
+    <Property Name="productId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Product" Relationship="DentistShopDBModel.FK_Product" FromRole="ProductSelectedGroups" ToRole="Product" />
+    <NavigationProperty Name="ProductGroup" Relationship="DentistShopDBModel.FK_Group" FromRole="ProductSelectedGroups" ToRole="ProductGroup" />
+  </EntityType>
+  <EntityType Name="Rates">
+    <Key>
+      <PropertyRef Name="rateId" />
+    </Key>
+    <Property Name="rateId" Type="Int32" Nullable="false" />
+    <Property Name="userId" Type="Int32" Nullable="false" />
+    <Property Name="productId" Type="Int32" Nullable="false" />
+    <Property Name="rate" Type="Double" Nullable="false" />
+    <NavigationProperty Name="Product" Relationship="DentistShopDBModel.FK_ProductRates" FromRole="Rates" ToRole="Product" />
+    <NavigationProperty Name="ShopUser" Relationship="DentistShopDBModel.FK_UserRates" FromRole="Rates" ToRole="ShopUser" />
+  </EntityType>
+  <Association Name="FK_ProductLike">
+    <End Type="DentistShopDBModel.Product" Role="Product" Multiplicity="1" />
+    <End Type="DentistShopDBModel.Likes" Role="Likes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="productId" />
+      </Principal>
+      <Dependent Role="Likes">
+        <PropertyRef Name="productId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserLike">
+    <End Type="DentistShopDBModel.ShopUser" Role="ShopUser" Multiplicity="1" />
+    <End Type="DentistShopDBModel.Likes" Role="Likes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ShopUser">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="Likes">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CommentForProduct">
+    <End Type="DentistShopDBModel.Product" Role="Product" Multiplicity="1" />
+    <End Type="DentistShopDBModel.ProductComments" Role="ProductComments" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="productId" />
+      </Principal>
+      <Dependent Role="ProductComments">
+        <PropertyRef Name="productId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Product">
+    <End Type="DentistShopDBModel.Product" Role="Product" Multiplicity="1" />
+    <End Type="DentistShopDBModel.ProductSelectedGroups" Role="ProductSelectedGroups" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="productId" />
+      </Principal>
+      <Dependent Role="ProductSelectedGroups">
+        <PropertyRef Name="productId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductAndGallery">
+    <End Type="DentistShopDBModel.Product" Role="Product" Multiplicity="1" />
+    <End Type="DentistShopDBModel.ProductGalleries" Role="ProductGalleries" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="productId" />
+      </Principal>
+      <Dependent Role="ProductGalleries">
+        <PropertyRef Name="productId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductRates">
+    <End Type="DentistShopDBModel.Product" Role="Product" Multiplicity="1" />
+    <End Type="DentistShopDBModel.Rates" Role="Rates" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="productId" />
+      </Principal>
+      <Dependent Role="Rates">
+        <PropertyRef Name="productId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CommentByUser">
+    <End Type="DentistShopDBModel.ShopUser" Role="ShopUser" Multiplicity="1" />
+    <End Type="DentistShopDBModel.ProductComments" Role="ProductComments" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ShopUser">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="ProductComments">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CommentParent">
+    <End Type="DentistShopDBModel.ProductComments" Role="ProductComments" Multiplicity="0..1" />
+    <End Type="DentistShopDBModel.ProductComments" Role="ProductComments1" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProductComments">
+        <PropertyRef Name="commentId" />
+      </Principal>
+      <Dependent Role="ProductComments1">
+        <PropertyRef Name="parentId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Group">
+    <End Type="DentistShopDBModel.ProductGroup" Role="ProductGroup" Multiplicity="1" />
+    <End Type="DentistShopDBModel.ProductSelectedGroups" Role="ProductSelectedGroups" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProductGroup">
+        <PropertyRef Name="groupId" />
+      </Principal>
+      <Dependent Role="ProductSelectedGroups">
+        <PropertyRef Name="groupId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_IdParent">
+    <End Type="DentistShopDBModel.ProductGroup" Role="ProductGroup" Multiplicity="0..1" />
+    <End Type="DentistShopDBModel.ProductGroup" Role="ProductGroup1" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProductGroup">
+        <PropertyRef Name="groupId" />
+      </Principal>
+      <Dependent Role="ProductGroup1">
+        <PropertyRef Name="parentId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserRates">
+    <End Type="DentistShopDBModel.ShopUser" Role="ShopUser" Multiplicity="1" />
+    <End Type="DentistShopDBModel.Rates" Role="Rates" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ShopUser">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="Rates">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="ShoppingCart">
+    <Key>
+      <PropertyRef Name="cartid" />
+    </Key>
+    <Property Name="cartid" Type="Int32" Nullable="false" />
+    <Property Name="productId" Type="Int32" Nullable="false" />
+    <Property Name="count" Type="Int32" Nullable="false" />
+    <Property Name="userId" Type="Int32" Nullable="false" />
+    <Property Name="wholeprice" Type="Int32" Nullable="false" />
+    <Property Name="sabtDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="isfinal" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Product" Relationship="DentistShopDBModel.FK_ProductShoppingCart" FromRole="ShoppingCart" ToRole="Product" />
+    <NavigationProperty Name="ShopUser" Relationship="DentistShopDBModel.FK_UserShoppingCart" FromRole="ShoppingCart" ToRole="ShopUser" />
+    <NavigationProperty Name="OrderListShopCarts" Relationship="DentistShopDBModel.FK_OrderShoppingCart" FromRole="ShoppingCart" ToRole="OrderListShopCarts" />
+  </EntityType>
+  <Association Name="FK_ProductShoppingCart">
+    <End Type="DentistShopDBModel.Product" Role="Product" Multiplicity="1" />
+    <End Type="DentistShopDBModel.ShoppingCart" Role="ShoppingCart" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="productId" />
+      </Principal>
+      <Dependent Role="ShoppingCart">
+        <PropertyRef Name="productId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserShoppingCart">
+    <End Type="DentistShopDBModel.ShopUser" Role="ShopUser" Multiplicity="1" />
+    <End Type="DentistShopDBModel.ShoppingCart" Role="ShoppingCart" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ShopUser">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="ShoppingCart">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="OrderListShopCarts">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" />
+    <Property Name="orderid" Type="Int32" Nullable="false" />
+    <Property Name="userId" Type="Int32" Nullable="false" />
+    <Property Name="cartid" Type="Int32" Nullable="false" />
+    <Property Name="isfinal" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="ShoppingCart" Relationship="DentistShopDBModel.FK_OrderShoppingCart" FromRole="OrderListShopCarts" ToRole="ShoppingCart" />
+    <NavigationProperty Name="ShopUser" Relationship="DentistShopDBModel.FK_UserOrderListShopCarts" FromRole="OrderListShopCarts" ToRole="ShopUser" />
+    <NavigationProperty Name="Orders" Relationship="DentistShopDBModel.FK_OrderShoppingCartOrder" FromRole="OrderListShopCarts" ToRole="Orders" />
+  </EntityType>
+  <Association Name="FK_OrderShoppingCart">
+    <End Type="DentistShopDBModel.ShoppingCart" Role="ShoppingCart" Multiplicity="1" />
+    <End Type="DentistShopDBModel.OrderListShopCarts" Role="OrderListShopCarts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ShoppingCart">
+        <PropertyRef Name="cartid" />
+      </Principal>
+      <Dependent Role="OrderListShopCarts">
+        <PropertyRef Name="cartid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserOrderListShopCarts">
+    <End Type="DentistShopDBModel.ShopUser" Role="ShopUser" Multiplicity="1" />
+    <End Type="DentistShopDBModel.OrderListShopCarts" Role="OrderListShopCarts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ShopUser">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="OrderListShopCarts">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Orders">
+    <Key>
+      <PropertyRef Name="orderid" />
+    </Key>
+    <Property Name="orderid" Type="Int32" Nullable="false" />
+    <Property Name="userId" Type="Int32" Nullable="false" />
+    <Property Name="wholeprice" Type="Int32" Nullable="false" />
+    <Property Name="sabtDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="isfinal" Type="Boolean" Nullable="false" />
+    <Property Name="RefID" Type="Int64" Nullable="false" />
+    <NavigationProperty Name="OrderListShopCarts" Relationship="DentistShopDBModel.FK_OrderShoppingCartOrder" FromRole="Orders" ToRole="OrderListShopCarts" />
+    <NavigationProperty Name="ShopUser" Relationship="DentistShopDBModel.FK_UserOrder" FromRole="Orders" ToRole="ShopUser" />
+  </EntityType>
+  <Association Name="FK_OrderShoppingCartOrder">
+    <End Type="DentistShopDBModel.Orders" Role="Orders" Multiplicity="1" />
+    <End Type="DentistShopDBModel.OrderListShopCarts" Role="OrderListShopCarts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Orders">
+        <PropertyRef Name="orderid" />
+      </Principal>
+      <Dependent Role="OrderListShopCarts">
+        <PropertyRef Name="orderid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserOrder">
+    <End Type="DentistShopDBModel.ShopUser" Role="ShopUser" Multiplicity="1" />
+    <End Type="DentistShopDBModel.Orders" Role="Orders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ShopUser">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="Orders">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

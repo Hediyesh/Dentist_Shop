@@ -1,0 +1,93 @@
+﻿@model DataLayer.ProductFeatures
+
+@{
+    ViewBag.Title = "ProductFeatures";
+    Layout = "~/Areas/ShopAdmin/Views/Shared/_AdminLayout.cshtml";
+}
+@Html.AntiForgeryToken()
+<h4>ویژگی های کالا</h4>
+<div class="row">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.productId)
+        @Html.HiddenFor(m => m.Id)
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <div class="form-horizontal">
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.featureId, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("featureId", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.featureId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.value, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.value, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.value, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="ثبت ویژگی" class="btn btn-sm btn-success" />
+                        <a class="btn btn-sm btn-primary" href="/ShopAdmin/products/index">بازگشت به لیست کالا</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            @{
+                List<DataLayer.ProductFeatures> features = ViewBag.Features;
+                <div class="table-responsive">
+                    <table class=" table table-bordered">
+                        <tr style="background-color:lightgray">
+                            <th>ویژگی</th>
+                            <th>مقدار</th>
+                            <th></th>
+                        </tr>
+                        <tbody>
+                            @foreach (var f in features)
+                            {
+                                <tr id="@f.Id">
+                                    <td>
+                                        @f.Features.featureTitle
+                                    </td>
+                                    <td>
+                                        @f.value
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-danger btn-sm" onclick="DeleteFeature(@f.Id)">
+                                            <i class=" glyphicon glyphicon-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    }
+</div>
+@section scripts{
+    <script type="text/javascript">
+        function DeleteFeature(id) {
+            if (confirm("آیا از حذف اطمینان دارید؟")) {
+                var token = document.getElementsByName("__RequestVerificationToken")[0].value;
+                $.ajax({
+                    type: 'post',
+                    dataType: 'json',
+                    data: { "id": id, "__RequestVerificationToken": token },
+                    url: '/ShopAdmin/products/DeleteFeature',
+                    success: function (data) {
+                        $("#" + id).remove();
+                    }
+                })
+            }
+        }
+    </script>
+}

@@ -1,0 +1,162 @@
+﻿@model DataLayer.ShopUser
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/ShopAdmin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h4>افزودن کاربر جدید</h4>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            
+            <p class="control-label col-md-2"><b>نام کاربری</b><b style="color:red"> *</b></p>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.userName, new
+                {
+                    htmlAttributes = new
+                    {
+                        @class = "form-control",
+                        @id = "usernameByAdmin",
+               @value = "",
+                        @oninput = "CheckName();"
+                    }
+                })
+                @Html.ValidationMessageFor(model => model.userName, "", new { @class = "text-danger", @id = "usernameByAdminError" })
+            </div>
+        </div>
+
+        <div class="form-group">
+           
+            <p class="control-label col-md-2"><b>نام</b><b style="color:red"> *</b></p>
+
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.firstName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.firstName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+           
+            <p class="control-label col-md-2"><b>نام خانوادگی</b><b style="color:red"> *</b></p>
+
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.lastName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.lastName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+          
+            <p class="control-label col-md-2"><b>ایمیل</b><b style="color:red"> *</b></p>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.emailAddress, new { htmlAttributes = new { @class = "form-control", @id = "emailByAdmin", @value = "", @oninput = "CheckEmail();" } })
+                @Html.ValidationMessageFor(model => model.emailAddress, "", new { @class = "text-danger", @id = "emailByAdminError" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            
+            <p class="control-label col-md-2"><b>رمز عبور</b><b style="color:red"> *</b></p>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.RoleId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("RoleIds", (IEnumerable<SelectListItem>)ViewBag.RoleIds,
+                       new { @class = "form-control", @value = "1", @id = "DrRole", @onchange = "ChangeRoleId()" })
+               
+            </div>
+        </div>
+        <input class="hidden" name="SelestedRoleId" id="SelestedRoleId" value="1" type="text" />
+        <div class="form-group">
+            @Html.LabelFor(model => model.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.IsActive)
+                    @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.phone, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.phone, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.phone, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="ثبت کاربر" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+}
+@section scripts{
+    <script type="text/javascript">
+        function ChangeRoleId() {
+            var role = document.getElementById("DrRole").selectedIndex;
+            document.getElementById("SelestedRoleId").value = role + 1;
+        }
+        function CheckName() {
+            var username = document.getElementById("usernameByAdmin").value;
+            var token = document.getElementsByName("__RequestVerificationToken")[0].value;
+            $.ajax({
+                type: "post",
+                url: "/Account/CheckName",
+                dataType: "json",
+                data: {
+                    "username": username, "__RequestVerificationToken": token
+                },
+                success: function (data) {
+                    if (data.toString().length != 0) {
+                        document.getElementById("usernameByAdminError").innerText = data;
+                    }
+                    else {
+                        document.getElementById("usernameByAdminError").innerText = "";
+                    }
+                }
+            })
+        }
+        function CheckEmail() {
+            var email = document.getElementById("emailByAdmin").value;
+            var token = document.getElementsByName("__RequestVerificationToken")[0].value;
+            $.ajax({
+                type: "post",
+                url: "/Account/CheckEmail",
+                dataType: "json",
+                data: {
+                    "email": email, "__RequestVerificationToken": token
+                },
+                success: function (data) {
+                    if (data.toString().length != 0) {
+                        document.getElementById("emailByAdminError").innerText = data;
+                    }
+                    else {
+                        document.getElementById("emailByAdminError").innerText = "";
+                    }
+                }
+            })
+        }
+    </script>
+}
+

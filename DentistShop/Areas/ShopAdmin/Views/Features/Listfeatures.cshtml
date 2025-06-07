@@ -1,0 +1,32 @@
+﻿@model IEnumerable<DataLayer.Features>
+<input type="text" class="hidden" id="ViewBagError" value="@ViewBag.Error" />
+<input type="text" class="hidden" id="ViewBagEditError" value="@ViewBag.EditError" />
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <tr style="background-color:lightgray">
+            <th style="width:60%">
+                @Html.DisplayNameFor(model => model.featureTitle)
+            </th>
+            <th style="width:40%"></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr id="@item.featureId">
+                <td>
+                    @Html.DisplayFor(modelItem => item.featureTitle)
+                </td>
+                <td>
+                    <a onclick="EditFeature(@item.featureId)" class="btn btn-sm btn-warning">
+                        <i class="glyphicon glyphicon-edit"></i>
+                    </a>
+                    <a onclick="DeleteFeature(@item.featureId)" class="btn btn-sm btn-danger">
+                        <i class="glyphicon glyphicon-trash"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+

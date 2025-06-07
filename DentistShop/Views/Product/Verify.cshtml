@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "Verify";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    @if (ViewBag.IsSuccess == true)
+    {
+        <div class="alert alert-success">
+            <h2>تراکنش با موفقیت انجام شد</h2>
+            <hr />
+            <p>کد پیگیری شما : @ViewBag.RefId</p>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-danger">
+            <h2>تراکنش با شکست مواجه شد</h2>
+            <hr />
+            <p>لطفا دوباره تلاش بفرمایید.</p>
+        </div>
+    }
+</div>
+

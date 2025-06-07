@@ -1,0 +1,112 @@
+﻿@model IEnumerable<DataLayer.Product>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/ShopAdmin/Views/Shared/_AdminLayout.cshtml";
+}
+@Html.AntiForgeryToken()
+<h4>کالا ها</h4>
+
+<a class="btn btn-sm btn-primary" href="/ShopAdmin/products/create">ایجاد کالای جدید</a>
+<br />
+<br />
+<div class="table-responsive" style="overflow-x:auto">
+    <table class="table table-bordered">
+        <tr style="background-color:lightgray">
+            <th>
+                @Html.DisplayNameFor(model => model.imageName)
+            </th>
+            
+            <th>
+                @Html.DisplayNameFor(model => model.productName)
+            </th>
+            <th>
+                گروه های کالا
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.discount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.productPriceWithDiscont)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.productcount)
+            </th>
+
+
+            <th>
+                @Html.DisplayNameFor(model => model.createDate)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr id="@item.productId">
+                <td>
+                    <img style="width:80px;height:80px" class="thumbnail" src="/Pictures/ProductImages/@item.imageName" />
+                </td>
+
+                
+                <td>
+                    @Html.DisplayFor(modelItem => item.productName)
+                </td>
+                <td>
+                    @if (item.ProductSelectedGroups.Any())
+                    {
+                        <ol>
+                            @foreach (var gr in item.ProductSelectedGroups)
+                            {
+                                <li>@gr.ProductGroup.groupName</li>
+                            }
+                        </ol>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.discount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.productPriceWithDiscont)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.productcount)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.createDate)
+                </td>
+                <td>
+                    <a class="btn btn-primary btn-xs" href="/ShopAdmin/products/ProductFeatures/@item.productId">ویژگی ها</a>
+                    <a class="btn btn-info btn-xs" href="/ShopAdmin/products/gallery/@item.productId">گالری</a>
+                    <a class="btn btn-warning btn-xs" href="/ShopAdmin/products/edit/@item.productId">ویرایش</a>
+                    <a class="btn btn-danger btn-xs" onclick="DeleteProduct(@item.productId)">حذف</a>
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        function DeleteProduct(id) {
+            if (confirm("آیا از حذف اطمینان دارید؟")) {
+                var token = document.getElementsByName("__RequestVerificationToken")[0].value;
+                $.ajax({
+                    type: 'post',
+                    dataType: 'json',
+                    data: { "id": id, "__RequestVerificationToken": token },
+                    url: '/ShopAdmin/products/DeleteConfirmed',
+                    success: function (data) {
+                        $("#" + id).remove();
+                    }
+                })
+            }
+        }
+    </script>
+}

@@ -1,0 +1,163 @@
+﻿@model DentistShop.ShopUserViewModel
+
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12"></div>
+    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+        <div class="panel" style="background-color:ghostwhite">
+            <div class="panel-heading" style="background-color:lightgray">
+                <h5><b>ثبت نام در سایت</b></h5>
+            </div>
+            <div class="panel-body">
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-horizontal">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            <p class="control-label col-md-3"><b>نام کاربری</b><b style="color:red"> *</b></p>
+                            <div class="col-md-9">
+                                @Html.EditorFor(model => model.userName, new
+                                {
+                                    htmlAttributes = new
+                                    {
+                                        @class = "form-control",
+                                        @id = "username"
+                           ,
+                                        @value = "",
+                                        @oninput = "CheckName();"
+                                    }
+                                })
+                                @Html.ValidationMessageFor(model => model.userName, "", new { @class = "text-danger", @id = "userNameError" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <p class="control-label col-md-3"><b>نام</b><b style="color:red"> *</b></p>
+                            <div class="col-md-9">
+                                @Html.EditorFor(model => model.firstName, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.firstName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <p class="control-label col-md-3"><b>نام خانوادگی</b><b style="color:red"> *</b></p>
+                            <div class="col-md-9">
+                                @Html.EditorFor(model => model.lastName, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.lastName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <p class="control-label col-md-3"><b>آدرس ایمیل</b><b style="color:red"> *</b></p>
+                            <div class="col-md-9">
+                                @Html.EditorFor(model => model.emailAddress, new
+                                {
+                                    htmlAttributes = new
+                                    {
+                                        @class = "form-control",
+                                        @id = "email"
+                           ,
+                                        @value = "",
+                                        @oninput = "CheckEmail();"
+                                    }
+                                })
+                                @Html.ValidationMessageFor(model => model.emailAddress, "", new { @class = "text-danger", @id = "emailError" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <p class="control-label col-md-3"><b>رمز عبور</b><b style="color:red"> *</b></p>
+                            <div class="col-md-9">
+                                @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <p class="control-label col-md-3"><b>تکرار رمز</b><b style="color:red"> *</b></p>
+                            <div class="col-md-9">
+                                @Html.EditorFor(model => model.RePassword, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.RePassword, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.phone, htmlAttributes: new { @class = "control-label col-md-3" })
+                            <div class="col-md-9">
+                                @Html.EditorFor(model => model.phone, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-3" })
+                            <div class="col-md-9">
+                                @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3"></div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                <input style="display:block" type="submit" value="ثبت اطلاعات" class="btn btn-success" />
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3"></div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12"></div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        function CheckName() {
+            var username = document.getElementById("username").value;
+            var token = document.getElementsByName("__RequestVerificationToken")[0].value;
+            $.ajax({
+                type:"post",
+                url: "/Accounts/CheckName",
+                dataType: "json",
+                data: {
+                    "username": username, "__RequestVerificationToken": token
+                },
+                success: function (data) {
+                    if (data.toString().length != 0) {
+                        document.getElementById("userNameError").innerText = data;
+                    }
+                    else {
+                        document.getElementById("userNameError").innerText = "";
+                    }
+                }
+            })
+        }
+        function CheckEmail() {
+            var email = document.getElementById("email").value;
+            var token = document.getElementsByName("__RequestVerificationToken")[0].value;
+            $.ajax({
+                type:"post",
+                url: "/Accounts/CheckEmail",
+                dataType: "json",
+                data: {
+                    "email": email, "__RequestVerificationToken": token
+                },
+                success: function (data) {
+                    if (data.toString().length != 0) {
+                        document.getElementById("emailError").innerText = data;
+                    }
+                    else {
+                        document.getElementById("emailError").innerText = "";
+                    }
+                }
+            })
+        }
+    </script>
+}
+
+

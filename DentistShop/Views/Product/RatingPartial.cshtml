@@ -1,0 +1,143 @@
+﻿
+<head>
+    <style>
+        #rateWrapper {
+            direction: ltr
+        }
+
+        .rating_stars {
+            margin-top: 15px;
+            display: inline-block;
+            font-size: 20px;
+            font-weight: 200;
+            color: #918f8f;
+            position: relative;
+        }
+
+            .rating_stars span .fa, .rating_stars span.active-low .fa-star-o, .rating_stars span.active-high .fa-star-o {
+                display: none;
+            }
+
+            .rating_stars span .fa-star-o {
+                display: inline-block;
+            }
+
+            .rating_stars span.s.active-high .fa-star {
+                display: inline-block;
+                color: #feb645;
+            }
+
+            .rating_stars span.s.active-low .fa-star-half-o {
+                display: inline-block;
+                color: #feb645;
+            }
+
+            .rating_stars span.r {
+                position: absolute;
+                top: 0;
+                height: 20px;
+                width: 10px;
+                left: 0;
+            }
+
+                .rating_stars span.r.r0_5 {
+                    left: 0px;
+                }
+
+                .rating_stars span.r.r1 {
+                    left: 10px;
+                    width: 11px;
+                }
+
+                .rating_stars span.r.r1_5 {
+                    left: 21px;
+                    width: 13px;
+                }
+
+                .rating_stars span.r.r2 {
+                    left: 34px;
+                    width: 12px;
+                }
+
+                .rating_stars span.r.r2_5 {
+                    left: 46px;
+                    width: 12px;
+                }
+
+                .rating_stars span.r.r3 {
+                    left: 58px;
+                    width: 11px;
+                }
+
+                .rating_stars span.r.r3_5 {
+                    left: 69px;
+                    width: 12px;
+                }
+
+                .rating_stars span.r.r4 {
+                    left: 81px;
+                    width: 12px;
+                }
+
+                .rating_stars span.r.r4_5 {
+                    left: 93px;
+                    width: 12px;
+                }
+
+                .rating_stars span.r.r5 {
+                    left: 105px;
+                    width: 12px;
+                }
+
+        label {
+            width: 100px;
+            display: inline-block;
+            text-align: right;
+            margin-right: 10px;
+        }
+
+        input {
+            width: 50px;
+            text-align: center;
+        }
+
+        .values {
+            margin-top: 20px;
+        }
+
+        .info {
+            max-width: 500px;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<div class="row" id="rateWrapper">
+    <span class="rating_stars rating_5">
+        <span class='s' id="s1" data-low='0.5' data-high='1'><i class="fa fa-star-o"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star"></i></span>
+        <span class='s' id="s2" data-low='1.5' data-high='2'><i class="fa fa-star-o"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star"></i></span>
+        <span class='s' id="s3" data-low='2.5' data-high='3'><i class="fa fa-star-o"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star"></i></span>
+        <span class='s' id="s4" data-low='3.5' data-high='4'><i class="fa fa-star-o"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star"></i></span>
+        <span class='s' id="s5" data-low='4.5' data-high='5'><i class="fa fa-star-o"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star"></i></span>
+
+        <span id="r1" class='r r0_5' data-rating='1' data-value='0.5'></span>
+        <span id="r2" class='r r1' data-rating='1' data-value='1'></span>
+        <span id="r3" class='r r1_5' data-rating='15' data-value='1.5'></span>
+        <span id="r4" class='r r2' data-rating='2' data-value='2'></span>
+        <span id="r5" class='r r2_5' data-rating='25' data-value='2.5'></span>
+        <span id="r6" class='r r3' data-rating='3' data-value='3'></span>
+        <span id="r7" class='r r3_5' data-rating='35' data-value='3.5'></span>
+        <span id="r8" class='r r4' data-rating='4' data-value='4'></span>
+        <span id="r9" class='r r4_5' data-rating='45' data-value='4.5'></span>
+        <span id="r10" class='r r5' data-rating='5' data-value='5'></span>
+    </span>
+    <div class="values hidden">
+        <div>
+            <label>امتیاز</label><input type="text" name="rating" id="rating_val" value="5" />
+        </div>
+    </div>
+    <hr />
+    <button class="btn btn-xs btn-danger" onclick="RateModalClose()">انصراف</button>
+    <button class="btn btn-xs btn-success" onclick="SetRate()">ثبت</button>
+
+</div>
+

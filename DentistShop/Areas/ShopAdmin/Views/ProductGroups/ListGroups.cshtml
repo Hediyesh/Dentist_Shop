@@ -1,0 +1,56 @@
+﻿@model IEnumerable<DataLayer.ProductGroup>
+<input type="text" class="hidden" id="ViewBagError" value="@ViewBag.Error" />
+<input type="text" class="hidden" id="ViewBagEditError" value="@ViewBag.EditError" />
+<div class="table-responsive" style="overflow-x:auto">
+    <table id="grTable" class="table table-bordered">
+        <tr style="background-color:lightgray">
+            <th>
+                @Html.DisplayNameFor(model => model.groupName)
+            </th>
+            <th>
+                زیر گروه ها
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr id="@item.groupId">
+                <td>
+                    @Html.DisplayFor(modelItem => item.groupName)
+                </td>
+                <td>
+                    @if (item.ProductGroup1.Any())
+                    {
+                        <ul>
+                            @foreach (var subgr in item.ProductGroup1)
+                            {
+                                <li id="@subgr.groupId">
+                                    @subgr.groupName
+                                    <a class="text-warning" style="cursor:pointer" onclick="EditGr(@subgr.groupId)">
+                                        <i class="glyphicon glyphicon-edit" title="ویرایش"></i>
+                                    </a>
+                                    <a class="text-danger" style="cursor:pointer" onclick="DeleteGr(@subgr.groupId)">
+                                        <i class="glyphicon glyphicon-trash" title="حذف"></i>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    }
+                </td>
+                <td>
+                    <a class="btn btn-primary btn-xs" onclick="CreateGroup(@item.groupId)">
+                        <i class="glyphicon glyphicon-plus" title="افزودن زیرگروه"></i>
+                    </a>
+                    <a class="btn btn-warning btn-xs" onclick="EditGr(@item.groupId)">
+                        <i class="glyphicon glyphicon-edit" title="ویرایش"></i>
+                    </a>
+                    <a class="btn btn-danger btn-xs" onclick="DeleteGr(@item.groupId)">
+                        <i class="glyphicon glyphicon-trash" title="حذف"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

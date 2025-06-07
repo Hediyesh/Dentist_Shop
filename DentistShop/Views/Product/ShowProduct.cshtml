@@ -1,0 +1,416 @@
+﻿@model DataLayer.Product
+@{
+    ViewBag.Title = "ShowProduct";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@Html.AntiForgeryToken()
+<h5>نام محصول : @Model.productName</h5>
+<input id="pageProductId" value="@ViewBag.productId" class="hidden" />
+<input class="hidden" value="@ViewBag.ProductCount" id="productCount" />
+<hr />
+<div class="row">
+    <div class="col-lg-2 col-md-2 col-sm-2"></div>
+    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+        <img id="productimg" style="cursor: pointer;width:100%; height: 200%;" onclick="GetBigger(this)" class="thumbnail" src="~/Pictures/ProductImages/@Model.imageName" />
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-2"></div>
+</div>
+<hr />
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <p>تعداد لایک : <i id="likesCount">@Model.likesCount</i></p>
+        <p>امتیاز : <i id="rate">@Model.rate</i> از 5</p>
+        <p>قیمت پوشاک : @Model.Price تومان</p>
+        <p>درصد تخفیف : @Model.discount</p>
+        <p>قیمت کل : @Model.productPriceWithDiscont تومان</p>
+    </div>
+</div>
+<br />
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="row">
+        <button onclick="LikeOrUnlikeProduct(@Model.productId)" style="display:inline-block; cursor: pointer">لایک <span id="heart" style="padding: 5px; cursor: pointer; display: inline-block" class="glyphicon glyphicon-heart-empty"></span></button>
+        <button onclick="RateProduct()" style="display:inline-block; cursor: pointer">امتیاز <span style="padding: 5px; cursor: pointer; display: inline-block" class="glyphicon glyphicon-star-empty"></span></button>
+        <button onclick="AddProductToCart()" style="display:inline-block; cursor: pointer">افزودن به سبد خرید <span style="padding: 5px; cursor: pointer; display: inline-block" class="glyphicon glyphicon-shopping-cart"></span></button>
+    </div>
+}
+<div class=" hidden" id="AddToShopppingCartDiv" style="background-color:ghostwhite">
+    <hr />
+    <div class="row">
+        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+            <div class="">
+                <p>تعداد را انتخاب کنید :    </p>
+                <b style="display:inline-block;cursor:pointer" onclick="if (document.getElementById('shopcartCount').value*1-1>=1) {document.getElementById('shopcartCount').value = document.getElementById('shopcartCount').value*1 - 1;}">-</b>
+                <input id="shopcartCount" style="display: inline-block;border:none;pointer-events:none" class="" value="1" min="1" max="@Model.productcount" />
+                <b style="display: inline-block; cursor: pointer" onclick="if (document.getElementById('shopcartCount').value * 1 + 1 <=@Model.productcount) { document.getElementById('shopcartCount').value = document.getElementById('shopcartCount').value * 1 + 1; }">+</b>
+            </div>
+            <br />
+            <br />
+            <div class="">
+                <button class="btn btn-xs btn-success" onclick="AddShopCart()">ثبت</button>
+                <button class="btn btn-xs btn-danger" onclick="NotAdd()">انصراف</button>
+            </div>
+
+        </div>
+        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+    </div>
+    <hr />
+</div>
+<br />
+<ul class="nav nav-tabs" id="tabs">
+    <li class="active"><a data-toggle="tab" href="#gallery">گالری</a></li>
+    <li><a data-toggle="tab" href="#grs">گروه ها</a></li>
+    <li><a data-toggle="tab" href="#fs">ویژگی ها</a></li>
+    <li><a data-toggle="tab" href="#coms">نظرات</a></li>
+</ul>
+
+<div class="tab-content">
+    <div id="gallery" class="tab-pane fade in active">
+        <br />
+        <div class="row">
+            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
+                <img style="cursor: pointer;width:150px; height: 100px;" onclick="ChangePic($(this).attr('src'))" class="thumbnail" src="~/Pictures/ProductImages/@Model.imageName" />
+
+            </div>
+            @if (Model.ProductGalleries.Any())
+            {
+                foreach (var item in Model.ProductGalleries)
+                {
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
+                        <img style="width:150px;height:100px;cursor:pointer" onclick="ChangePic($(this).attr('src'))" class="thumbnail" src="/Pictures/ProductImages/@item.imageName" />
+                    </div>
+                }
+
+            }
+        </div>
+    </div>
+    <div id="grs" class="tab-pane fade">
+        <br />
+        @if (Model.ProductSelectedGroups.Any())
+        {
+            <ul>
+                @foreach (var item in Model.ProductSelectedGroups)
+                {
+                    <li>
+                        @item.ProductGroup.groupName
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+    <div id="fs" class="tab-pane fade">
+        <br />
+        @if (ViewBag.productFeatures != null)
+        {
+            List<ShowProductFeaturesViewModel> list = ViewBag.productFeatures;
+            <ul>
+                @foreach (var item in list)
+                {
+                    <li>
+                        @item.featureTitle : @string.Join(",", item.values)
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+    <div id="coms" class="tab-pane fade">
+        <br />
+        @if (User.Identity.IsAuthenticated)
+        {
+            @Html.Action("CreateComment", "Product", new { area = "", id = Model.productId, username = User.Identity.Name })
+        }
+        else
+        {
+            <div class="row alert alert-warning">
+                <p>لطفا برای ثبت نظر خود ابتدا وارد شوید.</p>
+            </div>
+        }
+        <br />
+        <div id="CommentList">
+            @Html.Action("ShowComments", "Product", new { area = "", id = Model.productId })
+        </div>
+    </div>
+</div>
+<br />
+<div id="rateModal" class="modal fade row" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content" style="width:50%;top:20%;right:25%">
+            <div class="modal-body" style="text-align:center">
+                @Html.Action("RatingPartial", "Product", new { area = "" })
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        document.getElementById("replywarning").innerHTML = "";
+        var pageProductId = document.getElementById("pageProductId").value;
+        var userIsAuthenticated = document.getElementById("userIsAuthenticated").value;
+        $(document).ready(function ($) {
+            var token = document.getElementsByName("__RequestVerificationToken")[0].value;
+            if (userIsAuthenticated != 0) {
+                $.ajax({
+                    type: "post",
+                    dataType: 'json',
+                    url: "/Product/IsSetRateByUser",
+                    data: {
+                        "pageProductId": pageProductId, "__RequestVerificationToken": token
+                    },
+                    success: function (data) {
+                        if (data == false) {
+                            $('.s').addClass("active-high");
+                        }
+                        else {
+                            var j = data / 2;
+                            var i = 1;
+                            for (i = 1; i <= j; i++) {
+                                $("#s" + i).addClass("active-high");
+                            }
+                            if (j % 1 != 0) { $("#s" + i).addClass("active-low"); }
+                        }
+                    }
+                })
+                $.ajax({
+                    type: "post",
+                    dataType: 'json',
+                    url: "/Product/IsLiked",
+                    data: {
+                        "pageProductId": pageProductId, "__RequestVerificationToken": token
+                    },
+                    success: function (data) {
+                        if (data == true) {
+                            document.getElementById("heart").classList.remove("glyphicon-heart-empty");
+                            document.getElementById("heart").classList.add("glyphicon-heart");
+                        }
+                        else {
+                            document.getElementById("heart").classList.remove("glyphicon-heart");
+                            document.getElementById("heart").classList.add("glyphicon-heart-empty");
+                        }
+                    }
+                })
+
+            }
+            $('.rating_stars span.r').hover(function () {
+                var rating = $(this).data('rating');
+                var value = $(this).data('value');
+                $(this).parent().attr('class', '').addClass('rating_stars').addClass('rating_' + rating);
+                highlight_star(value);
+            }, function () {
+                var rating = $("#rating").val();
+                var value = $("#rating_val").val();
+                $(this).parent().attr('class', '').addClass('rating_stars').addClass('rating_' + rating);
+                highlight_star(value);
+            }).click(function () {
+                var value = $(this).data('value');
+                $("#rating_val").val(value);
+                var rating = $(this).data('rating');
+                $("#rating").val(rating);
+                highlight_star(value);
+            });
+            var highlight_star = function (rating) {
+                $('.rating_stars span.s').each(function () {
+                    var low = $(this).data('low');
+                    var high = $(this).data('high');
+                    $(this).removeClass('active-high').removeClass('active-low');
+                    if (rating >= high) $(this).addClass('active-high');
+                    else if (rating == low) $(this).addClass('active-low');
+                });
+            }
+
+        })
+        function Enseraf() {
+            $("#commentText").val("");
+            $("#commentId").val("");
+            $("#parentId").val("");
+            document.getElementById("replywarning").innerHTML = "";
+            document.getElementById("ValidationMessagecommentText").innerHTML = "";
+        }
+        function ReplyComment(id) {
+            document.getElementById("parentId").value = id;
+            document.getElementById("replywarning").innerHTML = "لطفا پاسخ خود را وارد کنید.";
+            $("html,body").delay().animate({
+                scrollTop: $('#tabs').offset().top
+            }, 1000);
+        }
+        function DeleteComment(id) {
+            if (confirm("آیا می خواهید نظر خود را حذف کنید؟")) {
+                var token = document.getElementsByName("__RequestVerificationToken")[0].value;
+                $.ajax({
+                    type: "post",
+                    url: "/Product/DeleteComment",
+                    dataType: "html",
+                    data: {
+                        "id": id, "__RequestVerificationToken": token
+                    },
+                    success: function (data) {
+                        $('#CommentList').html(data);
+                    }
+                });
+            }
+        }
+        function EditComment(id) {
+            var token = document.getElementsByName("__RequestVerificationToken")[0].value;
+            $.ajax({
+                type: "post",
+                url: "/Product/EditComment",
+                dataType: "json",
+                data: {
+                    "id": id, "__RequestVerificationToken": token
+                },
+                success: function (data) {
+                    document.getElementById("replywarning").innerHTML = "لطفا ویرایش را انجام دهید.";
+                    $("#commentText").val(data);
+                    $("#commentId").val(id);
+                    $("html,body").delay().animate({
+                        scrollTop: $('#tabs').offset().top
+                    }, 1000);
+                }
+            });
+        }
+        function AddComment() {
+            var token = document.getElementsByName("__RequestVerificationToken")[0].value;
+            var productId = document.getElementById("productId").value;
+            var parentId = document.getElementById("parentId").value;
+            var commentId = document.getElementById("commentId").value;
+            var commentText = document.getElementById("commentText").value;
+            if (commentText.toString().length == 0) {
+                document.getElementById("ValidationMessagecommentText").innerHTML = "لطفا اطلاعات را به درستی وارد کنید.";
+                return;
+            }
+            else {
+                document.getElementById("ValidationMessagecommentText").innerHTML = "";
+            }
+            document.getElementById("ValidationMessagecommentText").innerHTML = "";
+            $.ajax({
+                type: "post",
+                url: "/Product/CreateNewComment",
+                dataType: "html",
+                data: {
+                    "commentId": commentId, "productId": productId, "parentId": parentId,
+                    "commentText": commentText, "__RequestVerificationToken": token
+                },
+                success: function (data) {
+                    if (data == "لطفا اطلاعات را به درستی وارد کنید.") {
+                        document.getElementById("ValidationMessagecommentText").innerHTML = "لطفا اطلاعات را به درستی وارد کنید.";
+                    }
+                    else {
+                        document.getElementById("ValidationMessagecommentText").innerHTML = "";
+                        document.getElementById("parentId").value = "";
+                        document.getElementById("commentId").value = "";
+                        document.getElementById("commentText").value = "";
+                        $('#CommentList').html(data);
+                    }
+                }
+            });
+        }
+        function LikeOrUnlikeProduct(id) {
+            if (userIsAuthenticated == 0) {
+                alert("لطفا ابتدا وارد سایت شوید.");
+                return;
+            }
+            var d = document.getElementById("heart");
+            var b = d.classList.contains("glyphicon-heart-empty");
+            var token = document.getElementsByName("__RequestVerificationToken")[0].value;
+            if (b == true) {
+                $.ajax({
+                    type: "post",
+                    dataType: 'json',
+                    url: "/Product/LikeProduct",
+                    data: {
+                        "userIsAuthenticated": userIsAuthenticated, "pageProductId": pageProductId, "__RequestVerificationToken": token
+                    },
+                    success: function (data) {
+                        if (data == true) {
+                            d.classList.remove("glyphicon-heart-empty");
+                            d.classList.add("glyphicon-heart");
+                            document.getElementById("likesCount").innerText = document.getElementById("likesCount").innerText * 1 + 1;
+                        }
+                    }
+                })
+            }
+            else {
+                $.ajax({
+                    type: "post",
+                    dataType: 'json',
+                    url: "/Product/UnLikeProduct",
+                    data: {
+                        "userIsAuthenticated": userIsAuthenticated, "pageProductId": pageProductId, "__RequestVerificationToken": token
+                    },
+                    success: function (data) {
+                        if (data == true) {
+                            d.classList.remove("glyphicon-heart");
+                            d.classList.add("glyphicon-heart-empty");
+                            document.getElementById("likesCount").innerText = document.getElementById("likesCount").innerText * 1 - 1;
+                        }
+                    }
+                })
+            }
+        }
+        function RateProduct() {
+            if (userIsAuthenticated == 0) {
+                alert("لطفا ابتدا وارد سایت شوید.");
+                return;
+            }
+            $("#rateModal").modal('show');
+        }
+        function RateModalClose() {
+            $("#rateModal").modal('hide');
+        }
+        function SetRate() {
+            var value = $("#rating_val").val();
+            var pageProductId = document.getElementById("pageProductId").value;
+            var token = document.getElementsByName("__RequestVerificationToken")[0].value;
+            $.ajax({
+                type: "post",
+                url: "/Product/SetRate",
+                dataType: "json",
+                data: {
+                    "pageProductId": pageProductId, "value": value, "__RequestVerificationToken": token
+                },
+                success: function (data) {
+                    $("#rating_val").val(5);
+                    RateModalClose();
+                    document.getElementById("rate").innerText = data;
+                }
+            });
+        }
+        function ChangePic(src) {
+            document.getElementById("productimg").src = src;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        function AddProductToCart() {
+            if (userIsAuthenticated == 0) {
+                alert("لطفا ابتدا وارد سایت شوید.")
+                return;
+            }
+            $("#AddToShopppingCartDiv").removeClass('hidden');
+
+        }
+        function NotAdd() {
+            $("#AddToShopppingCartDiv").addClass('hidden');
+            $("#shopcartCount").val(1);
+        }
+        function AddShopCart() {
+            var count = $("#shopcartCount").val();
+            var pageProductId = $("#pageProductId").val();
+            var token = document.getElementsByName("__RequestVerificationToken")[0].value;
+            $.ajax({
+                type: 'post',
+                dataType: 'json',
+                url: '/Product/AddToShopCart',
+                data: {
+
+                    "count": count, "pageProductId": pageProductId, "__RequestVerificationToken": token
+                },
+                success: function (data) {
+                    if (data == true) {
+                        alert("درخواست با موفقیت در سبد خرید شما ثبت گردید.");
+                        $("#shopcartCount").val(1);
+                    }
+                }
+            })
+        }
+    </script>
+}

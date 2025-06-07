@@ -1,0 +1,30 @@
+﻿@model IEnumerable<ShopDetailsViewModel>
+@{
+    ViewBag.Title = "ShopDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br />
+<h4 class="center-block">جزئیات خرید</h4>
+<div class="table-responsive">
+    <table class="table  table-bordered">
+        <thead style="background-color:dimgray">
+            <tr>
+                <th style="color:white">نام کالا</th>
+                <th style="color:white">تعداد</th>
+                <th style="color:white">قیمت</th>
+            </tr>
+        </thead>
+        <tbody style="background-color:lightgray">
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.productname</td>
+                    <td>@item.count</td>
+                    <td>@item.wholeprice</td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+</div>
+

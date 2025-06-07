@@ -1,0 +1,16 @@
+﻿@model IEnumerable<DataLayer.ProductGroup>
+
+@foreach (var group in Model.Where(w => w.parentId == null))
+{
+    <p style="cursor:pointer;color:darkblue" onclick="ToggleUl(@group.groupId)">@group.groupName<span style="font-size:x-small" id="span@(group.groupId)" class="glyphicon glyphicon-chevron-down"></span></p>
+    if (Model.Any(a => a.parentId == group.groupId))
+    {
+        <ul class="hidden" id="ulgroup@(group.groupId)" style="list-style-type:disc">
+            @foreach (var subgroup in Model.Where(w => w.parentId == group.groupId))
+            {
+                <li style="color: darkblue"><a style="color: darkblue" href="/Archive?selectedGroups=@subgroup.groupId">@subgroup.groupName</a></li>
+            }
+        </ul>
+    }
+    <hr />
+}

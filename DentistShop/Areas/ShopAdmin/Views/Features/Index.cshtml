@@ -1,0 +1,78 @@
+﻿@model IEnumerable<DataLayer.Features>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/ShopAdmin/Views/Shared/_AdminLayout.cshtml";
+}
+@Html.AntiForgeryToken()
+<h4>ویژگی ها</h4>
+<hr />
+<a onclick="CreateFeature()" class="btn btn-sm btn-primary">افزودن ویژگی جدید</a>
+<br />
+<br />
+<div id="listFeatures">
+    @Html.Action("ListFeatures", "Features")
+</div>
+<div id="AddFeatureModal" class="row modal fade" role="dialog" style="width:90%;margin-right:1px">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span onclick="hideFeatureModal();" class="glyphicon glyphicon-remove" style="float:left"></span>
+                <p style="float:right" id="Featurehead"></p>
+            </div>
+            <div class="modal-body" id="AddFeatureModalBody">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        function CreateFeature() {
+            $.get("/ShopAdmin/Features/Create/",
+                function (result) {
+                    $("#Featurehead").html("افزودن ویژگی جدید");
+                    $("#AddFeatureModal").modal('show');
+                    $("#AddFeatureModalBody").html(result);
+                });
+        }
+        function hideFeatureModal() {
+            if (document.getElementById("ViewBagError").value != "") {
+                $("#Featurehead").html("افزودن ویژگی جدید");
+                $("#AddFeatureModal").modal('show');
+                document.getElementById("featureTitleError").innerHTML = document.getElementById("ViewBagError").value;
+            }
+            if (document.getElementById("ViewBagEditError").value != "") {
+                $("#Featurehead").html("ویرایش");
+                $("#AddFeatureModal").modal('show');
+                document.getElementById("featureTitleEditError").innerHTML = document.getElementById("ViewBagEditError").value;
+            }
+            if (document.getElementById("ViewBagError").value == "" && document.getElementById("ViewBagEditError").value == "") {
+                $("#AddFeatureModal").modal('hide');
+            }
+        }
+        function EditFeature(id) {
+            $.get("/ShopAdmin/Features/Edit/" + id,
+                function (result) {
+                    $("#Featurehead").html("ویرایش");
+                    $("#AddFeatureModal").modal('show');
+                    $("#AddFeatureModalBody").html(result);
+                });
+        }
+        function DeleteFeature(id) {
+            if (confirm("آیا از حذف اطمینان دارید؟")) {
+                var token = document.getElementsByName("__RequestVerificationToken")[0].value;
+                $.ajax({
+                    type: 'post',
+                    dataType: 'json',
+                    data: { "id": id, "__RequestVerificationToken": token },
+                    url: '/ShopAdmin/features/DeleteConfirmed',
+                    success: function (data) {
+                        $("#" + id).remove();
+                    }
+                })
+            }
+        }
+    </script>
+}

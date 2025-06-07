@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="DentistShopDBModelStoreContainer" CdmEntityContainer="DentistShopDBEntities">
+    <EntitySetMapping Name="Roles">
+      <EntityTypeMapping TypeName="DentistShopDBModel.Roles">
+        <MappingFragment StoreEntitySet="Roles">
+          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+          <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+          <ScalarProperty Name="RoleTitle" ColumnName="RoleTitle" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Features">
+      <EntityTypeMapping TypeName="DentistShopDBModel.Features">
+        <MappingFragment StoreEntitySet="Features">
+          <ScalarProperty Name="featureTitle" ColumnName="featureTitle" />
+          <ScalarProperty Name="featureId" ColumnName="featureId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Product">
+      <EntityTypeMapping TypeName="DentistShopDBModel.Product">
+        <MappingFragment StoreEntitySet="Product">
+          <ScalarProperty Name="productPriceWithDiscont" ColumnName="productPriceWithDiscont" />
+          <ScalarProperty Name="viewCount" ColumnName="viewCount" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+          <ScalarProperty Name="createDate" ColumnName="createDate" />
+          <ScalarProperty Name="imageName" ColumnName="imageName" />
+          <ScalarProperty Name="discount" ColumnName="discount" />
+          <ScalarProperty Name="productcount" ColumnName="productcount" />
+          <ScalarProperty Name="productName" ColumnName="productName" />
+          <ScalarProperty Name="rate" ColumnName="rate" />
+          <ScalarProperty Name="likesCount" ColumnName="likesCount" />
+          <ScalarProperty Name="productId" ColumnName="productId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProductFeatures">
+      <EntityTypeMapping TypeName="DentistShopDBModel.ProductFeatures">
+        <MappingFragment StoreEntitySet="ProductFeatures">
+          <ScalarProperty Name="value" ColumnName="value" />
+          <ScalarProperty Name="productId" ColumnName="productId" />
+          <ScalarProperty Name="featureId" ColumnName="featureId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ShopUser">
+      <EntityTypeMapping TypeName="DentistShopDBModel.ShopUser">
+        <MappingFragment StoreEntitySet="ShopUser">
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="phone" ColumnName="phone" />
+          <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="ActiveCode" ColumnName="ActiveCode" />
+          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+          <ScalarProperty Name="pic" ColumnName="pic" />
+          <ScalarProperty Name="password" ColumnName="password" />
+          <ScalarProperty Name="emailAddress" ColumnName="emailAddress" />
+          <ScalarProperty Name="lastName" ColumnName="lastName" />
+          <ScalarProperty Name="firstName" ColumnName="firstName" />
+          <ScalarProperty Name="userName" ColumnName="userName" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Likes">
+      <EntityTypeMapping TypeName="DentistShopDBModel.Likes">
+        <MappingFragment StoreEntitySet="Likes">
+          <ScalarProperty Name="productId" ColumnName="productId" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="likeId" ColumnName="likeId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProductComments">
+      <EntityTypeMapping TypeName="DentistShopDBModel.ProductComments">
+        <MappingFragment StoreEntitySet="ProductComments">
+          <ScalarProperty Name="parentId" ColumnName="parentId" />
+          <ScalarProperty Name="commentText" ColumnName="commentText" />
+          <ScalarProperty Name="createDate" ColumnName="createDate" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="productId" ColumnName="productId" />
+          <ScalarProperty Name="commentId" ColumnName="commentId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProductGalleries">
+      <EntityTypeMapping TypeName="DentistShopDBModel.ProductGalleries">
+        <MappingFragment StoreEntitySet="ProductGalleries">
+          <ScalarProperty Name="imageName" ColumnName="imageName" />
+          <ScalarProperty Name="productId" ColumnName="productId" />
+          <ScalarProperty Name="galleryId" ColumnName="galleryId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProductGroup">
+      <EntityTypeMapping TypeName="DentistShopDBModel.ProductGroup">
+        <MappingFragment StoreEntitySet="ProductGroup">
+          <ScalarProperty Name="parentId" ColumnName="parentId" />
+          <ScalarProperty Name="groupName" ColumnName="groupName" />
+          <ScalarProperty Name="groupId" ColumnName="groupId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProductSelectedGroups">
+      <EntityTypeMapping TypeName="DentistShopDBModel.ProductSelectedGroups">
+        <MappingFragment StoreEntitySet="ProductSelectedGroups">
+          <ScalarProperty Name="productId" ColumnName="productId" />
+          <ScalarProperty Name="groupId" ColumnName="groupId" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Rates">
+      <EntityTypeMapping TypeName="DentistShopDBModel.Rates">
+        <MappingFragment StoreEntitySet="Rates">
+          <ScalarProperty Name="rate" ColumnName="rate" />
+          <ScalarProperty Name="productId" ColumnName="productId" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="rateId" ColumnName="rateId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ShoppingCart">
+      <EntityTypeMapping TypeName="DentistShopDBModel.ShoppingCart">
+        <MappingFragment StoreEntitySet="ShoppingCart">
+          <ScalarProperty Name="isfinal" ColumnName="isfinal" />
+          <ScalarProperty Name="sabtDate" ColumnName="sabtDate" />
+          <ScalarProperty Name="wholeprice" ColumnName="wholeprice" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="count" ColumnName="count" />
+          <ScalarProperty Name="productId" ColumnName="productId" />
+          <ScalarProperty Name="cartid" ColumnName="cartid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrderListShopCarts">
+      <EntityTypeMapping TypeName="DentistShopDBModel.OrderListShopCarts">
+        <MappingFragment StoreEntitySet="OrderListShopCarts">
+          <ScalarProperty Name="isfinal" ColumnName="isfinal" />
+          <ScalarProperty Name="cartid" ColumnName="cartid" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="orderid" ColumnName="orderid" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Orders">
+      <EntityTypeMapping TypeName="DentistShopDBModel.Orders">
+        <MappingFragment StoreEntitySet="Orders">
+          <ScalarProperty Name="RefID" ColumnName="RefID" />
+          <ScalarProperty Name="isfinal" ColumnName="isfinal" />
+          <ScalarProperty Name="sabtDate" ColumnName="sabtDate" />
+          <ScalarProperty Name="wholeprice" ColumnName="wholeprice" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="orderid" ColumnName="orderid" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

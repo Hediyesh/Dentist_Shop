@@ -1,0 +1,218 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AdminLayout</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-theme.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-rtl.css" rel="stylesheet" />
+    <style>
+        @@font-face {
+            font-family: 'Tanha-FD';
+            src: url('../../fonts/Tanha-FD.eot') format('embedded-opentype');
+            src: url('../../fonts/Tanha-FD.ttf') format('truetype');
+            src: url('../../fonts/Tanha-FD.woff') format('woff');
+            src: url('../../fonts/Tanha-FD.woff2') format('woff2');
+        }
+
+        body {
+            font-family: Tanha-FD, Arial;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: #555;
+            }
+
+        #searchimg {
+            position: absolute;
+            top: 22px;
+            left: 15px;
+        }
+
+        #inputsearch {
+            max-width: 95%;
+        }
+
+        @@media (min-width: 1281px) {
+
+            #inmeno {
+                height: 100vh;
+            }
+
+            #searchimg {
+                left: 15px;
+            }
+        }
+
+        @@media (min-width: 1025px) and (max-width: 1280px) {
+
+            #inmeno {
+                height: 100vh;
+            }
+
+            #searchimg {
+                left: 15px;
+            }
+        }
+
+        @@media (min-width: 768px) and (max-width: 1024px) {
+
+            #inmeno {
+                height: 100vh;
+            }
+
+            #searchimg {
+                left: 15px;
+            }
+        }
+
+        @@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+            #inmeno {
+                height: 100vh;
+            }
+
+            #searchimg {
+                left: 15px;
+            }
+        }
+
+        @@media (min-width: 481px) and (max-width: 767px) {
+            #inmeno {
+                height: unset;
+                min-width: 100%;
+            }
+
+            #meno {
+                min-width: 100%;
+                background-color: dimgray;
+            }
+
+            #searchimg {
+                left: 35px;
+            }
+        }
+
+        @@media (min-width: 320px) and (max-width: 480px) {
+            #inmeno {
+                height: unset;
+                min-width: 100%;
+            }
+
+            #meno {
+                min-width: 100%;
+                background-color: dimgray;
+            }
+
+            #searchimg {
+                left: 35px;
+            }
+        }
+    </style>
+
+</head>
+<body style="direction:rtl;">
+    <div class="row navbar navbar-fixed-top" style="background-color: dimgray; color: white">
+        <div class="row">
+            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-1">
+            </div>
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-10">
+                <br />
+                <p style="float:right;cursor:pointer" class="hidden-lg hidden-md hidden-sm"><span onclick="ToggleDrop()" class="glyphicon glyphicon-align-right"></span></p>
+                <p style="float: right;margin-right:7px"><b> فروشگاه بارمان طب هیرکان</b></p>
+                <p style="float:left;margin-left:7px">ادمین سایت</p>
+            </div>
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div id="meno" class="col-lg-2 col-md-2 col-sm-12 col-xs-12 hidden-xs hidden-sm">
+            <div id="inmeno" class="" style="position: fixed; background-color: dimgray; color: white">
+                <br />
+                <a href="/" style="color: white;margin-right:7px">صفحه اصلی سایت</a>
+                <hr />
+                <p style="margin-right: 7px;cursor:pointer" onclick="ToggleUlAdmin(1)">کالا ها<span style="font-size:x-small" id="span1" class="glyphicon glyphicon-chevron-down"></span></p>
+                <ul class="hidden" id="ul1" style="list-style-type:none">
+                    <li><a href="/ShopAdmin/products/Index" style="color:white">لیست کالا ها</a></li>
+                    <li><a href="/ShopAdmin/productgroups/Index" style="color:white">گروه ها</a></li>
+                    <li><a href="/ShopAdmin/features/Index" style="color: white; margin-right: 7px">ویژگی ها</a></li>
+                </ul>
+                <hr />
+                <a href="/ShopAdmin/Roles/Index" style="color: white; margin-right: 7px">نقش ها</a>
+                <hr />
+                <a href="/ShopAdmin/ShopUsers/Index" style="color: white; margin-right: 7px">کاربران</a>
+                <hr />
+            </div>
+        </div>
+        <div class="col-lg-1 col-md-1  col-xs-1 col-sm-1"></div>
+        <div class="col-lg-8 col-md-8 col-sm-10 col-xs-10 body-content">
+            <br />
+            @RenderBody()
+        </div>
+        <div class="col-lg-1 col-md-1 col-xs-1 col-sm-1"></div>
+    </div>
+
+    <br />
+    <br />
+
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script type="text/javascript">
+
+
+        function ToggleUlAdmin(id) {
+            if ($("#ul" + id).hasClass("hidden")) {
+                $("#ul" + id).removeClass("hidden");
+                $("#span" + id).removeClass("glyphicon-chevron-down");
+                $("#span" + id).addClass("glyphicon-chevron-up");
+            }
+            else {
+                $("#ul" + id).addClass("hidden");
+                $("#span" + id).removeClass("glyphicon-chevron-up");
+                $("#span" + id).addClass("glyphicon-chevron-down");
+            }
+        }
+        function ToggleDrop() {
+            if ($("#meno").hasClass("hidden-sm") || $("#meno").hasClass("hidden-xs")) {
+                $("#meno").removeClass("hidden-sm");
+                $("#meno").removeClass("hidden-xs");
+
+                document.getElementById("inmeno").style.position = "unset";
+                document.getElementById("inputsearch").style.width = "100%";
+            }
+            else {
+                $("#meno").addClass("hidden-sm");
+                $("#meno").addClass("hidden-xs");
+                document.getElementById("inmeno").style.position = "fixed";
+                document.getElementById("inputsearch").style.width = "90%";
+            }
+        }
+    </script>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

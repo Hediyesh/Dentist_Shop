@@ -1,0 +1,81 @@
+﻿@model IEnumerable<DataLayer.ProductGroup>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/ShopAdmin/Views/Shared/_AdminLayout.cshtml";
+
+}
+@Html.AntiForgeryToken()
+<h4>گروه ها</h4>
+<a class="btn btn-primary btn-sm" onclick="CreateGroup()">افزودن گروه جدید</a>
+<br />
+<br />
+<div id="listGroup">
+    @Html.Action("ListGroups", "ProductGroups")
+</div>
+<div id="AddGrModal" class="row modal fade" role="dialog" style="width:90%;margin-right:1px">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span onclick="hideGrModal();" class="glyphicon glyphicon-remove" style="float:left"></span>
+                <p style="float:right" id="grhead"></p>
+            </div>
+            <div class="modal-body" id="AddGrModalBody">
+
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        function CreateGroup(parentId) {
+            $.get("/ShopAdmin/ProductGroups/Create/" + parentId,
+                function (result) {
+                    $("#grhead").html("افزودن گروه جدید");
+                    $("#AddGrModal").modal('show');
+                    $("#AddGrModalBody").html(result);
+                });
+        }
+        function hideGrModal() {
+            if (document.getElementById("ViewBagError").value != "") {
+                $("#grhead").html("افزودن گروه جدید");
+                $("#AddGrModal").modal('show');
+                document.getElementById("groupNameAddError").innerHTML = document.getElementById("ViewBagError").value;
+            }
+            if (document.getElementById("ViewBagEditError").value != "") {
+                $("#grhead").html("ویرایش گروه");
+                $("#AddGrModal").modal('show');
+                document.getElementById("groupNameEditError").innerHTML = document.getElementById("ViewBagEditError").value;
+            }
+            if (document.getElementById("ViewBagError").value == "" && document.getElementById("ViewBagEditError").value == "") {
+                $("#AddGrModal").modal('hide');
+            }
+
+        }
+        function Error() {
+            alert()
+        }
+        function EditGr(id) {
+            $.get("/ShopAdmin/ProductGroups/Edit/" + id,
+                function (result) {
+                    $("#grhead").html("ویرایش گروه");
+                    $("#AddGrModal").modal('show');
+                    $("#AddGrModalBody").html(result);
+                });
+        }
+        function DeleteGr(id) {
+            if (confirm("آیا از حذف اطمینان دارید؟")) {
+                var token = document.getElementsByName("__RequestVerificationToken")[0].value;
+                $.ajax({
+                    type: 'post',
+                    dataType: 'json',
+                    data: { "id": id, "__RequestVerificationToken": token },
+                    url: '/ShopAdmin/ProductGroups/DeleteConfirmed',
+                    success: function (data) {
+                        $("#" + data).remove();
+                    }
+                })
+            }
+        }
+    </script>
+}

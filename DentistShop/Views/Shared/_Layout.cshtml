@@ -1,0 +1,398 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-theme.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-rtl.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.css" rel="stylesheet" />
+    <style>
+        @@font-face {
+            font-family: 'Tanha-FD';
+            src: url('../../fonts/Tanha-FD.eot') format('embedded-opentype');
+            src: url('../../fonts/Tanha-FD.ttf') format('truetype');
+            src: url('../../fonts/Tanha-FD.woff') format('woff');
+            src: url('../../fonts/Tanha-FD.woff2') format('woff2');
+        }
+
+        body {
+            font-family: Tanha-FD, Arial;
+            min-width: 100%;
+            min-height: 100%;
+        }
+
+        html, body {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+        }
+
+        .footer {
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(150,0,0,0.1);
+            text-align: center;
+            padding: 5px;
+            margin: 0;
+            width: 100%;
+        }
+
+        .main {
+            background-color: white;
+        }
+
+        .myshop {
+            text-align: center;
+        }
+
+        #input_container {
+            position: relative;
+        }
+
+        .sidebar {
+            width: 200px;
+            overflow: scroll;
+            height: 100vh;
+            background-color: white ;
+            z-index: 1;
+            top: 0;
+            position: absolute;
+        }
+        /* width */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+
+            /* Handle on hover */
+            ::-webkit-scrollbar-thumb:hover {
+                background: #555;
+            }
+    </style>
+    <style>
+        /*index styles*/
+        .imggallary {
+            border-radius: 2px;
+            height: 90px;
+            width: 100%;
+        }
+        .pgender {
+            position: absolute;
+            top: 2px;
+            right: 20px;
+            z-index: 1;
+            color: white;
+        }
+
+        .item {
+            width: 100%;
+            height: 100px;
+        }
+
+        .imgcar {
+            width: 100%;
+            height: 100px;
+        }
+
+        @@media (min-width: 768px) {
+            .imgcar {
+                width: 100%;
+                height: 200px;
+            }
+
+            .item {
+                width: 100%;
+                height: 200px;
+            }
+
+            .imggallary {
+                border-radius: 2px;
+                height: 150px;
+                width: 100%;
+            }
+        }
+
+        @@media (min-width: 992px) {
+            .imgcar {
+                width: 100%;
+                height: 300px;
+            }
+
+            .item {
+                width: 100%;
+                height: 300px;
+            }
+            .imggallary {
+                border-radius: 2px;
+                height: 150px;
+                width: 100%;
+            }
+        }
+
+        @@media (min-width: 1200px) {
+            .imgcar {
+                width: 100%;
+                height: 400px;
+            }
+
+            .item {
+                width: 100%;
+                height: 400px;
+            }
+            .imggallary {
+                border-radius: 2px;
+                height: 200px;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body id="body">
+    @Html.AntiForgeryToken()
+    @{ int i = 0;}
+    @if (User.Identity.IsAuthenticated)
+    {
+        i = 1;
+    }
+    <input class="hidden" value="@i" id="userIsAuthenticated" />
+
+    <div class="row navbar navbar-fixed-top" style="background-color: lightblue;">
+        <div class="row">
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-3">
+                <span; onclick="ShowMenu()" class="glyphicon glyphicon-align-right" style="margin-top:10px;cursor:pointer"></span;>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-5 col-xs-3">
+                <h4 class="myshop"><b>فروشگاه بارمان طب هیرکان</b></h4>
+            </div>
+            <div class="col-lg-1 col-md-1 col-sm-2 col-xs-3" style="text-align:left">
+                <a href="/Archive" style="color:black;"><span style="margin-top: 10px; margin-left: 5px; cursor: pointer;" class="glyphicon glyphicon-search"></span></a>
+            </div>
+
+            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
+        </div>
+        <div class="row sidebar hidden" id="sidebar">
+            <span class="glyphicon glyphicon-remove" style="float:left;color:lightgray" onclick="$(this).closest('div').addClass('hidden')"></span>
+            <div class="row" style="margin-right:40px;color:mediumvioletred">
+                <br />
+                <br />
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <br />
+                    <p class=" mypanel" style="color: darkblue">@User.Identity.Name عزیز خوش آمدید!</p>
+                    <hr class=" mypanel" />
+                    <a class=" mypanel" style="cursor:pointer;color:darkblue" href="/ShoppingCart/@User.Identity.Name">سبد خرید</a>
+                    <hr />
+                    <a id="userid" class=" mypanel" style="cursor: pointer; color: darkblue" href="/UserPanel/Panel/PanelPage/@FormsAuthentication.HashPasswordForStoringInConfigFile(User.Identity.Name,"MD5")">ورود به پنل کاربری</a>
+                    <hr class=" mypanel" />
+                    <p class=" mypanel" style="cursor:pointer;color:darkblue" onclick="Logout()">خروج از سایت</p>
+
+                }
+                else
+                {
+                    <p id="vorud" style="cursor:pointer;color:darkblue" onclick="Login()">ورود به سایت</p>
+
+                }
+                <hr />
+                <a style="color: darkblue" href="/Home/Index">صفحه ی اصلی</a>
+                <hr />
+                <a style="color: darkblue" href="/Archive">آرشیو محصولات</a>
+                <hr />
+            </div>
+        </div>
+
+    </div>
+    <div class="row body-content">
+        <div class="row">
+            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 side">
+            </div>
+            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 main" id="BodyContent">
+                <br />
+                <br />
+                <br />
+                @RenderBody()
+                <br />
+                <br />
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 side"></div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class=" footer" style="min-width:100%;background-color:ghostwhite;">
+                <span title="Telegram" style="padding:5px" class="glyphicon glyphicon-send"></span>
+                <span title="Email" style="padding:5px" class="glyphicon glyphicon-envelope"></span>
+                <span title="Phone" style="padding:5px" class="glyphicon glyphicon-earphone"></span>
+                <br />
+                <br />
+                <p>By Nightweb</p>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div id="loginModal" class="row modal fade" role="dialog" style="width:100%">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span onclick="hideModal();" class="glyphicon glyphicon-remove" style="float:left"></span>
+                    <p style="float:right">ورود به سایت</p>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+                        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                            <p style="color:red" id="khata"></p>
+                        </div>
+                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+                        <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3">
+                            <label for="namekarbar" style="display:inline-block">نام کاربری</label>
+                        </div>
+                        <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
+                            <input id="namekarbar" type="text" style="display:inline-block" value="" class="form-control" />
+                        </div>
+                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+                        <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3">
+                            <label for="ramz" style="display:inline-block">رمز عبور</label>
+                        </div>
+                        <div class="col-lg-8 col-md-8 col-sm-7 col-xs-7">
+                            <input id="ramz" type="password" style="display:inline-block" value="" class="form-control" />
+                        </div>
+                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+                        <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3">
+                            <button class="btn btn-success btn-sm" onclick="LoginSite()" style="float:right">ورود</button>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-2 col-xs-2"></div>
+                        <div class="col-lg-4 col-md-4 col-sm-5 col-xs-5">
+                            <button class="btn btn-danger btn-sm" onclick="CloseLogin()" style="float:left">انصراف</button>
+                        </div>
+                        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div>
+                    </div>
+                    <br />
+                    <a href="/Accounts/ForgotPassword">برای بازیابی رمز عبور کلیک کنید.</a>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <a href="/Register" style="float:right;margin-right:10px">برای ثبت نام کلیک کنید.</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script type="text/javascript">
+        var userIsAuthenticated = document.getElementById("userIsAuthenticated").value;
+        function GetBigger(thisimg) {
+            window.document.location = thisimg.src;
+        }
+        function ShowProduct(id) {
+            document.location.href = '/ShowProduct/' + id;
+        }
+        function ShowDetails(id) {
+            document.location.href = '/userpanel/panel/ShopDetails/' + id;
+        }
+        $(document).mouseup(function (e) {
+            var container2 = $("#sidebar");
+            if (!container2.is(e.target) && container2.has(e.target).length === 0) {
+                $("#sidebar").addClass("hidden");
+            }
+        });
+        function ShowMenu() {
+            $("#sidebar").removeClass("hidden");
+        }
+        function ToggleUl(grid) {
+            if ($("#ulgroup" + grid).hasClass("hidden")) {
+                $("#ulgroup" + grid).removeClass("hidden");
+                $("#span" + grid).removeClass("glyphicon-chevron-down");
+                $("#span" + grid).addClass("glyphicon-chevron-up");
+            }
+            else {
+                $("#ulgroup" + grid).addClass("hidden");
+                $("#span" + grid).removeClass("glyphicon-chevron-up");
+                $("#span" + grid).addClass("glyphicon-chevron-down");
+            }
+        }
+        function Login() {
+            $("#loginModal").modal('show');
+            $("#sidebar").addClass("hidden");
+        }
+        function hideModal() {
+            $('#loginModal').modal('hide');
+        }
+        function LoginSite() {
+            var token = document.getElementsByName("__RequestVerificationToken")[0].value;
+            var namekarbar = document.getElementById("namekarbar").value;
+            var ramz = document.getElementById("ramz").value;
+            if (ramz.toString().length == 0 || namekarbar.toString().length == 0) {
+                alert("لطفا اطلاعات را تکمیل کنید.");
+                return;
+            }
+            $.ajax({
+                type: "post",
+                url: "/Accounts/Login",
+                dataType: "json",
+                data: {
+                    "namekarbar": namekarbar, "ramz": ramz, "__RequestVerificationToken": token
+                },
+                success: function (data) {
+                    if (data == "حساب کاربری شما فعال نمی باشد." || data == "کاربری با این اطلاعات وجود ندارد.") {
+                        document.getElementById("khata").innerText = data;
+                    }
+                    else {
+                        alert("کاربر عزیز خوش آمدید.");
+                        document.getElementById("namekarbar").value = "";
+                        document.getElementById("ramz").value = "";
+                        document.getElementById("khata").innerText = "";
+                        $('#loginModal').modal('hide');
+                        window.document.location = "/";
+                    }
+                }
+
+            })
+        }
+        function CloseLogin() {
+            document.getElementById("namekarbar").value = "";
+            document.getElementById("ramz").value = "";
+            $('#loginModal').modal('hide');
+        }
+        function Logout() {
+            if (confirm("آیا می خواهید خارج شوید؟")) {
+                window.document.location = '/Accounts/Logout';
+            }
+        }
+    </script>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

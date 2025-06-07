@@ -1,0 +1,121 @@
+﻿@model IEnumerable<DataLayer.ShoppingCart>
+@{
+    ViewBag.Title = "ShoppingCart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@**@
+@Html.AntiForgeryToken()
+@if (ViewBag.username != User.Identity.Name)
+{
+    <br />
+    <div class="row alert alert-warning">
+        <b>توجه!</b>
+        <p>کاربر گرامی شما مجوز دسترسی به این بخش را ندارید.</p>
+    </div>
+}
+else
+{
+    <div class="row">
+        <h5 style="float:right">سبد خرید</h5>
+        <h5 style="float:left">کاربر : @ViewBag.username</h5>
+    </div>
+    if (Model.Count() < 1)
+    {
+        <div class="alert alert-warning">
+            <p>کاربر گرامی، شما تا کنون کالایی به سبد خرید خود اضافه نکرده اید.</p>
+        </div>
+    }
+    else
+    {
+        foreach (var item in Model)
+        {
+
+            <div class="panel row" id="panel@(item.cartid)" style="background-color: ghostwhite">
+                <div class="panel-heading" style="padding:1%">
+                    <h5>نام کالا : <a href="/ShowProduct/@item.productId">@item.Product.productName</a></h5>
+                </div>
+                <div class="panel-body" style="padding:3%;background-color:white">
+                    <div class="row">
+                        <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                            <p>قیمت : @item.Product.Price</p>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                            <p>درصد تخفیف : @item.Product.discount %</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                            <p>تعداد : @item.count</p>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                            <p>قیمت کل : @item.wholeprice</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer" style="padding:1%;background-color:ghostwhite">
+                    <input type="checkbox" class="mycheckbox" value="@item.cartid" style="float: right; margin-bottom: 2px" /><p style="float: right; margin-bottom: 2px">نهایی کردن</p>
+                    <button id="@(item.cartid)" onclick="DeleteFromShopList(this.id)" class="btn btn-danger btn-sm" style="float:left;margin-bottom:5px">حذف از سبد</button>
+                </div>
+            </div>
+        }
+        <div class="row">
+            <button class="btn btn-block btn-success btn-sm" onclick="Pay()">برای نهایی شدن سبد خرید خود کلیک کنید.</button>
+        </div>
+
+    }
+
+}
+@section scripts{
+    <script type="text/javascript">
+        function DeleteFromShopList(id) {
+            if (confirm("آیا از حذف اطمینان دارید؟")) {
+                var token = document.getElementsByName("__RequestVerificationToken")[0].value;
+                $.ajax({
+                    type: 'post',
+                    dataType: 'json',
+                    url: '/Product/RemoveFromUserShopCart',
+                    data: {
+                        "__RequestVerificationToken": token, "id": id
+                    },
+                    success: function (data) {
+                        if (data == true) {
+                            document.getElementById("panel" + id).remove();
+                        }
+                    }
+                })
+            }
+        }
+        function Pay() {
+            var checks = [];
+            $(".mycheckbox").each(function () {
+                if ($(this).prop('checked') == true) {
+                    checks.push($(this).val());
+                }
+            })
+            if (checks.length == 0) {
+                alert("لطفا کالای مورد نظر را انتخاب کنید.");
+                return;
+            }
+            else {
+                var token = document.getElementsByName("__RequestVerificationToken")[0].value;
+                $.ajax({
+                    type: 'post',
+                    dataType: 'html',
+                    url: '/Product/Pay',
+                    data: {
+                        "__RequestVerificationToken": token, "checks": checks
+                    },
+                    success: function (data) {
+                        if (data.includes("http")) {
+                            data=data.replace('"', '');
+                            document.location.href = data;
+                        }
+                        else {
+                            alert(data)
+                        }
+                    }
+                })
+            }
+        }
+    </script>
+}

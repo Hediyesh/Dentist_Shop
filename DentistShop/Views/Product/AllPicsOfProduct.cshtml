@@ -1,0 +1,17 @@
+﻿@model IEnumerable<DataLayer.ProductGalleries>
+@{
+    ViewBag.Title = "AllPicsOfProduct";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h5>نام محصول : @ViewBag.productname</h5>
+<hr />
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="margin-top:5px;margin-bottom:5px;">
+            <img src="~/Pictures/ProductImages/@item.imageName" class="imggallary" style="cursor:pointer" onclick="GetBigger(this)" />
+        </div>
+    }
+</div>
+

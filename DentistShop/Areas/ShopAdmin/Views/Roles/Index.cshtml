@@ -1,0 +1,195 @@
+﻿@model IEnumerable<DataLayer.Roles>
+
+@{
+    ViewBag.Title = "مدیریت نقش ها";
+    Layout = "~/Areas/ShopAdmin/Views/Shared/_AdminLayout.cshtml";
+}
+@Html.AntiForgeryToken()
+<h4>مدیریت نقش ها</h4>
+<hr />
+<a class="btn btn-sm btn-primary" onclick="CreateRole()">ایجاد نقش جدید</a>
+<br />
+<br />
+<div id="listRoles">
+    <div class="row table-responsive" style="width:100%;overflow-x:auto">
+        <table id="roleTable" class="table table-bordered">
+            <tr style="background-color:lightgray">
+                <th>
+                    @Html.DisplayNameFor(model => model.RoleName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RoleTitle)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr id="@item.RoleId">
+                    <td id="tdname@(item.RoleId)">
+                        @item.RoleName
+                    </td>
+                    <td id="tdtitle@(item.RoleId)">
+                        @item.RoleTitle
+                    </td>
+                    <td>
+                        <a class="btn btn-warning btn-sm" onclick="EditRole(@item.RoleId)" title="ویرایش">
+                            <i class="glyphicon glyphicon-edit"></i>
+                        </a>
+                        <button class="btn btn-danger btn-sm" onclick="HazfeNaghsh(@item.RoleId)" title="حذف">
+                            <i class="glyphicon glyphicon-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+
+ 
+</div>
+<div id="RoleModal" class="row modal fade" role="dialog" style="width:90%">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span onclick="hideRoleModal();" class="glyphicon glyphicon-remove" style="float:left"></span>
+                <p style="float:right" id="rolehead"></p>
+            </div>
+            <p id="modalerror" class="alert alert-danger"></p>
+            <div class="modal-body" id="RoleModalBody">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        $("#modalerror").hide();
+        function CreateRolePost() {
+            var token = document.getElementsByName("__RequestVerificationToken")[0].value;
+            var RoleTitle = document.getElementById("roleTitle").value;
+            var RoleName = document.getElementById("roleName").value;
+            if (RoleTitle.toString().length == 0 || RoleName.toString().length == 0) {
+                $("#modalerror").html('لطفا اطلاعات را کامل کنید.');
+                $("#modalerror").show();
+                return;
+            }
+            else {
+                $("#modalerror").hide();
+            }
+            $.ajax({
+                type: 'post',
+                dataType: 'json',
+                data: { "RoleName": RoleName, "RoleTitle": RoleTitle, "__RequestVerificationToken": token },
+                url: '/ShopAdmin/roles/Create',
+                success: function (data) {
+                    if (data == false) {
+                        $("#modalerror").html('لطفا اطلاعات را به درستی وارد کنید.');
+                        $("#modalerror").show();
+                    }
+                    if (data == "عنوان نقش تکراری می باشد.") {
+                        document.getElementById("roleNameError").innerHTML = data;
+                    }
+                    else { document.getElementById("roleNameError").innerHTML = ""; }
+                    if (data == "عنوان سیستمی نقش تکراری می باشد.") {
+                        document.getElementById("roleTitleError").innerHTML = data;
+                    }
+                    else { document.getElementById("roleTitleError").innerHTML = ""; }
+                    if (data.RoleId != null) {
+                        hideRoleModal();
+                        var str = "<tr id=\"" + data.RoleId + "\">" +
+                            "<td>" + data.RoleName + "</td>" +
+                            "<td>" + data.RoleTitle + "</td>" +
+                            "<td>" +
+                            "<a class=\"btn btn-warning btn-sm\" onclick=\"EditRole(" + data.RoleId + ")\" title=\"ویرایش\">" +
+                            "<i class=\"glyphicon glyphicon-edit\"></i>" +
+                            "</a>" +
+                            " <button class=\"btn btn-danger btn-sm\" onclick=\"HazfeNaghsh(" + data.RoleId + ")\" title=\"حذف\"> " +
+                            "<i class=\"glyphicon glyphicon-trash\"></i>" +
+                            "</button>" +
+                            "</td>" +
+                            "</tr>";
+                        $("#roleTable").append(str);
+                        document.getElementById("roleTitle").value = "";
+                        document.getElementById("roleName").value = "";
+                    }
+                }
+            })
+        }
+        function EditRolePost(id) {
+            var token = document.getElementsByName("__RequestVerificationToken")[0].value;
+            var RoleTitle = document.getElementById("roleTitleEdit").value;
+            var RoleId = id;
+            var RoleName = document.getElementById("roleNameEdit").value;
+            if (RoleTitle.toString().length == 0 || RoleName.toString().length == 0) {
+                $("#modalerror").html('لطفا اطلاعات را کامل کنید.');
+                $("#modalerror").show();
+                return;
+            }
+            else {
+                $("#modalerror").hide();
+            }
+            $.ajax({
+                type: 'post',
+                dataType: 'json',
+                data: { "RoleId": RoleId, "RoleName": RoleName, "RoleTitle": RoleTitle, "__RequestVerificationToken": token },
+                url: '/ShopAdmin/roles/Edit',
+                success: function (data) {
+                    if (data == false) {
+                        $("#modalerror").html('لطفا اطلاعات را به درستی وارد کنید.');
+                        $("#modalerror").show();
+                    }
+                    if (data == "عنوان نقش تکراری می باشد.") {
+                        document.getElementById("roleNameEditError").innerHTML = data;
+                    }
+                    else { document.getElementById("roleNameEditError").innerHTML = ""; }
+                    if (data == "عنوان سیستمی نقش تکراری می باشد.") {
+                        document.getElementById("roleTitleEditError").innerHTML = data;
+                    }
+                    else { document.getElementById("roleTitleEditError").innerHTML = ""; }
+                    if (data.RoleId != null) {
+                        document.getElementById("tdname" + data.RoleId).innerHTML = data.RoleName;
+                        document.getElementById("tdtitle" + data.RoleId).innerHTML = data.RoleTitle;
+                        document.getElementById("roleTitleEdit").value = "";
+                        document.getElementById("roleNameEdit").value = "";
+                        hideRoleModal();
+                    }
+                }
+            })
+        }
+        function CreateRole() {
+            $.get("/ShopAdmin/roles/Create",
+                function (result) {
+                    $("#rolehead").html("افزودن نقش جدید");
+                    $("#RoleModal").modal('show');
+                    $("#RoleModalBody").html(result);
+                });
+        }
+        function hideRoleModal() {
+            $("#RoleModal").modal('hide');
+        }
+        function EditRole(id) {
+            $.get("/ShopAdmin/roles/Edit/" + id,
+                function (result) {
+                    $("#rolehead").html("ویرایش نقش");
+                    $("#RoleModal").modal('show');
+                    $("#RoleModalBody").html(result);
+                });
+        }
+        function HazfeNaghsh(id) {
+            if (confirm("آیا از حذف اطمینان دارید؟")) {
+                var token = document.getElementsByName("__RequestVerificationToken")[0].value;
+                $.ajax({
+                    type: 'post',
+                    dataType: 'json',
+                    data: { "id": id, "__RequestVerificationToken": token },
+                    url: '/ShopAdmin/roles/DeleteConfirmed',
+                    success: function (data) {
+                        $("#" + id).remove();
+                    }
+                })
+            }
+        }
+    </script>
+}

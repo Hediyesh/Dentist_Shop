@@ -1,0 +1,59 @@
+﻿@model IEnumerable<DataLayer.ShoppingCart>
+@{
+    ViewBag.Title = "ShoppingCard";
+}
+@Html.AntiForgeryToken()
+<div class="row">
+    <h5 style="float:right">سبد خرید</h5>
+    <h5 style="float:left">کاربر : @ViewBag.name</h5>
+</div>
+@*@if (Model.Count() < 1)
+{
+    <div class="alert alert-warning">
+        <p>کاربر گرامی، شما تا کنون کالایی به سبد خرید خود اضافه نکرده اید.</p>
+    </div>
+}*@
+        <div class="panel row" style="background-color: ghostwhite">
+            <div class="panel-heading" style="padding:1%">
+                <h5>نام کالا : </h5>
+            </div>
+            <div class="panel-body" style="padding:3%;background-color:white">
+                <div class="row">
+                    <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                        <p>قیمت : </p>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                        <p>رنگ : </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                        <p>درصد تخفیف : </p>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                        <p>تعداد : </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                        <p>قیمت کل : </p>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                        <p>سایز : </p>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer" style="padding:1%;background-color:ghostwhite">
+                <input type="checkbox" class="mycheckbox" style="float: right; margin-bottom: 2px" /><p style="float: right; margin-bottom: 2px">نهایی کردن</p>
+                <button onclick="DeleteFromShopList(this.id)" class="btn btn-danger btn-sm" style="float:left;margin-bottom:5px">حذف از سبد</button>
+            </div>
+        </div>
+
+    <div class="row">
+        <p style="color:green">مبلغ کل خرید: <i id="wholeMoney"></i></p>
+    </div>
+    <div class="row">
+        <button class="btn btn-block btn-success btn-sm" onclick="Pay()">برای نهایی شدن سبد خرید خود کلیک کنید.</button>
+    </div>
+
+
